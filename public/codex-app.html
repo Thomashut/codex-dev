@@ -37,7 +37,7 @@
       app-header {
         background-color: #00897B;
         color: #fff;
-        width: 100%;
+        width: 105%;
       }
       paper-icon-button {
         --paper-icon-button-ink-color: white;
@@ -45,15 +45,26 @@
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
+
+      app-drawer {
+        background-color: #00897B;
+        --app-drawer-scrim-background: rgba(0,137,123,0.3);
+      }
       app-drawer {
 
+      }
+      #nav-head {
+        background-color: #00897B
+      }
+      iron-selector {
+        display: list-item;
       }
     </style>
 
     <app-drawer-layout>
 
       <app-drawer slot="drawer">
-        <app-toolbar>Navigate</app-toolbar>
+        <app-toolbar id="nav-head" >Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
           role="navigation" fallback-selection="404">
             <paper-button name="home"> Home </paper-button>
@@ -79,6 +90,8 @@
           </app-toolbar>
         </app-header>
 
+
+
         <iron-pages selected="{{page}}" attr-for-selected="name"
           fallback-selection="404" role="main">
 
@@ -94,7 +107,6 @@
         </iron-pages>
 
       </app-header-layout>
-
     </app-drawer-layout>
 
   </template>
