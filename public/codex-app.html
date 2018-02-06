@@ -1,0 +1,121 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="bower_components/paper-progress/paper-progress.html">
+
+
+<link rel="import" href="bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+
+<link rel="import" href="codex-login.html">
+<link rel="import" href="codex-home.html">
+<link rel="import" href="codex-404.html">
+<link rel="import" href="codex-bounties.html">
+<link rel="import" href="codex-feed.html">
+<link rel="import" href="codex-posts.html">
+<link rel="import" href="codex-profile.html">
+<link rel="import" href="codex-saved.html">
+<link rel="import" href="codex-search.html">
+
+
+<dom-module id="codex-app">
+  <template>
+
+    <style>
+      app-header {
+        background-color: #00897B;
+        color: #fff;
+        width: 100%;
+      }
+      paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
+      app-drawer {
+
+      }
+    </style>
+
+    <app-drawer-layout>
+
+      <app-drawer slot="drawer">
+        <app-toolbar>Navigate</app-toolbar>
+        <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
+          role="navigation" fallback-selection="404">
+            <paper-button name="home"> Home </paper-button>
+            <paper-button name="search"> Search </paper-button>
+            <paper-button name="bounties"> Bounties </paper-button>
+            <paper-button name="feed"> Your Feed </paper-button>
+
+            <paper-button name="profile"> Profile </paper-button>
+            <paper-button name="posts"> Posts </paper-button>
+            <paper-button name="saved"> Saved </paper-button>
+
+            <codex-login user="[[user]]"> </codex-login>
+        </iron-selector>
+
+      </app-drawer>
+
+      <app-header-layout>
+
+        <app-header slot="header" reveals effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div main-title>Codex</div>
+          </app-toolbar>
+        </app-header>
+
+        <iron-pages selected="{{page}}" attr-for-selected="name"
+          fallback-selection="404" role="main">
+
+          <codex-home name="home"> </codex-home>
+          <codex-404 name="404"> </codex-404>
+          <codex-bounties name="bounties"> </codex-bounties>
+          <codex-feed name="feed"> </codex-feed>
+          <codex-posts name="posts"> </codex-posts>
+          <codex-profile name="profile"> </codex-profile>
+          <codex-search name="search"> </codex-search>
+          <codex-saved name="saved"> </codex-saved>
+
+        </iron-pages>
+
+      </app-header-layout>
+
+    </app-drawer-layout>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'codex-app',
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: "_pageChanged",
+          value: "home"
+        },
+        user: {
+          type: Object
+        }
+      },
+      _pageChanged: function() {
+        console.log("Something happened 0_0");
+      }
+    });
+  </script>
+</dom-module>

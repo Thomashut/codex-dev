@@ -1,0 +1,39 @@
+<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+
+<dom-module id="codex-login">
+  <template>
+    <firebase-auth
+      id="auth"
+      user="{{user}}"
+      status-known="{{statusKnown}}"
+      provider="google">
+    </firebase-auth>
+
+    <paper-button raised on-tap="login" hidden$="[[user]]"> Sign In </paper-button>
+    <paper-button raised on-tap="logout" hidden$="[[!user]]"> Sign Out </paper-button>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'codex-login',
+      properties: {
+        user: {
+          type: Object
+        },
+        statusKnown: {
+          type: Object
+        }
+      },
+      login: function() {
+        return this.$.auth.signInWithPopup();
+      },
+      logout: function() {
+          return this.$.auth.signOut();
+      }
+    });
+  </script>
+
+</dom-module>
