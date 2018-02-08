@@ -1,11 +1,11 @@
-<dom-module id="Codex_posts">
+<dom-module id="codex-posts">
   <template>
     <h1> You have posted poop all mr. [[user.displayName]] </h1>
   </template>
 
   <script>
     // Polymer({
-    //   is: 'codex-posts',
+    //   is: 'codex_posts',
     //   properties: {
     //     user: {
     //       type: Object
@@ -13,8 +13,8 @@
     //   }
     // });
 
-    class Codex_posts extends Polymer.Element {
-      static get is() {return 'Codex_posts';}
+    class codex_posts extends Polymer.Element {
+      static get is() {return 'codex-posts';}
 
       static get properties() {
         return {
@@ -26,7 +26,7 @@
 
     }
 
-    customElements.define(Codex_posts.is,Codex_posts);
+    customElements.define(codex_posts.is,codex_posts);
   </script>
 
 </dom-module>

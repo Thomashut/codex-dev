@@ -30,7 +30,7 @@
 <link rel="import" href="codex-search.html">
 
 
-<dom-module id="Codex_app">
+<dom-module id="codex-app">
   <template>
 
     <style>
@@ -123,7 +123,7 @@
 
   <script>
     // Polymer({
-    //   is: 'codex-app',
+    //   is: 'codex_app',
     //   properties: {
     //     page: {
     //       type: String,
@@ -144,9 +144,9 @@
     //   }
     // });
 
-    class Codex_app extends Polymer.Element {
+    class codex_app extends Polymer.Element {
 
-      static get is() {return 'Codex_app';}
+      static get is() {return 'codex-app';}
 
       static get properties() {
         return {
@@ -163,15 +163,15 @@
         }
       }
 
-      userChanged() {
+      _userChanged() {
         console.log("User has been changed - Codex App Level");
       }
 
-      pageChanged() {
+      _pageChanged() {
         console.log("Page has been changed - Codex App Level");
       }
     }
 
-    customElements.define(Codex_app.is,Codex_app);
+    customElements.define(codex_app.is,codex_app);
   </script>
 </dom-module>

@@ -1,7 +1,7 @@
-<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
+codex_<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
-<dom-module id="Codex_login">
+<dom-module id="codex-login">
   <template>
     <firebase-auth
       id="auth"
@@ -40,8 +40,8 @@
     //   }
     // });
 
-    class Codex_login extends Polymer.Element {
-      static get is() {return 'Codex_login';}
+    class codex_login extends Polymer.Element {
+      static get is() {return 'codex-login';}
 
       static get properties() {
         return {
@@ -71,6 +71,8 @@
         console.log("User changed - Codex Login Level");
       }
     }
+
+    customElements.define(codex_login.is,codex_login);
   </script>
 
 </dom-module>

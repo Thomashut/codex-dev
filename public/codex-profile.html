@@ -1,4 +1,4 @@
-<dom-module id="Codex_profile">
+<dom-module id="codex-profile">
   <template>
     <template is="dom-if" if="[[user]]">
       <h1> Hi [[user.displayName]] </h1>
@@ -7,7 +7,7 @@
 
   <script>
     // Polymer({
-    //   is: 'codex-profile',
+    //   is: 'codex_profile',
     //   properties: {
     //     user: {
     //       type: Object
@@ -15,8 +15,8 @@
     //   }
     // });
 
-    class Codex_profile extends Polymer.Element {
-      static get is() {return 'Codex_profile';}
+    class codex_profile extends Polymer.Element {
+      static get is() {return 'codex-profile';}
 
       static get properties() {
         return {
@@ -27,7 +27,7 @@
       }
 
     }
-    customElements.define(Codex_profile.is,Codex_profile);
+    customElements.define(codex_profile.is,codex_profile);
   </script>
 
 </dom-module>
