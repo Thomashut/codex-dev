@@ -1,13 +1,19 @@
-<dom-module id="codex-search">
+<dom-module id="Codex_search">
   <template>
     <h1> A Wild Search Page Has Appeared! </h1>
     <h2> You Have Found Nothing! </h2>
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-search',
-    });
+    // Polymer({
+    //   is: 'codex-search',
+    // });
+
+    class Codex_search extends Polymer.Element {
+      static get is() {return 'Codex_search';}
+    }
+
+    customElements.define(Codex_search.is,Codex_search);
   </script>
 
 </dom-module>

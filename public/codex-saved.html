@@ -1,12 +1,18 @@
-<dom-module id="codex-saved">
+<dom-module id="Codex_saved">
   <template>
     <h1> I Do Not Understand the Concept of saving? </h1>
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-saved',
-    });
+    // Polymer({
+    //   is: 'codex-saved',
+    // });
+
+    class Codex_profile extends Polymer.Element {
+      static get is() {return 'Codex_profile';}
+    }
+
+    customElements.define(Codex_profile.is,Codex_profile);
   </script>
 
 </dom-module>

@@ -30,7 +30,7 @@
 <link rel="import" href="codex-search.html">
 
 
-<dom-module id="codex-app">
+<dom-module id="Codex_app">
   <template>
 
     <style>
@@ -86,7 +86,7 @@
             <paper-button raised class="indigo" name="posts"> Posts </paper-button>
             <paper-button raised class="indigo" name="saved"> Saved </paper-button>
 
-            <codex-login user="[[user]]"> </codex-login>
+            <codex-login user="[[user]]" page="[[page]]"> </codex-login>
         </iron-selector>
 
       </app-drawer>
@@ -122,22 +122,56 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-app',
-      properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: "_pageChanged",
-          value: "home"
-        },
-        user: {
-          type: Object
+    // Polymer({
+    //   is: 'codex-app',
+    //   properties: {
+    //     page: {
+    //       type: String,
+    //       reflectToAttribute: true,
+    //       observer: "_pageChanged",
+    //       value: "home"
+    //     },
+    //     user: {
+    //       type: Object,
+    //       observer: "_userChanged"
+    //     }
+    //   },
+    //   _pageChanged: function() {
+    //     console.log("Something happened 0_0");
+    //   },
+    //   _userChanged: function() {
+    //     console.log("User has changed");
+    //   }
+    // });
+
+    class Codex_app extends Polymer.Element {
+
+      static get is() {return 'Codex_app';}
+
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: "_pageChanged",
+            value: "home"
+          },
+          user: {
+            type: Object,
+            observer: "_userChanged"
+          }
         }
-      },
-      _pageChanged: function() {
-        console.log("Something happened 0_0");
       }
-    });
+
+      userChanged() {
+        console.log("User has been changed - Codex App Level");
+      }
+
+      pageChanged() {
+        console.log("Page has been changed - Codex App Level");
+      }
+    }
+
+    customElements.define(Codex_app.is,Codex_app);
   </script>
 </dom-module>

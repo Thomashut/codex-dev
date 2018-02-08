@@ -1,7 +1,7 @@
 <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
-<dom-module id="codex-login">
+<dom-module id="Codex_login">
   <template>
     <firebase-auth
       id="auth"
@@ -17,23 +17,60 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-login',
-      properties: {
-        user: {
-          type: Object
-        },
-        statusKnown: {
-          type: Object
+    // Polymer({
+    //   is: 'codex-login',
+    //   properties: {
+    //     user: {
+    //       type: Object,
+    //       observer: "_userchanged2"
+    //     },
+    //     statusKnown: {
+    //       type: Object
+    //     },
+    //     page: {
+    //       type: String
+    //     }
+    //   },
+    //   login: function() {
+    //     this.$.page = "profile";
+    //     return this.$.auth.signInWithPopup();
+    //   },
+    //   logout: function() {
+    //       return this.$.auth.signOut();
+    //   }
+    // });
+
+    class Codex_login extends Polymer.Element {
+      static get is() {return 'Codex_login';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            observer: "_userchanged2"
+          },
+          statusKnown: {
+            type: Object
+          },
+          page: {
+            type: String
+          }
         }
-      },
-      login: function() {
-        return this.$.auth.signInWithPopup();
-      },
-      logout: function() {
-          return this.$.auth.signOut();
       }
-    });
+
+      login() {
+        this.$.page = "profile";
+        return this.$.auth.signInWithPopup();
+      }
+
+      logout() {
+        return this.$.auth.signOut();
+      }
+
+      _userchanged2() {
+        console.log("User changed - Codex Login Level");
+      }
+    }
   </script>
 
 </dom-module>

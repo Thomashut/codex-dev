@@ -1,12 +1,19 @@
-<dom-module id="codex-bounties">
+<dom-module id="Codex_bounties">
   <template>
     <h1> Nothing to report on the bounty front </h1>
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-bounties',
-    });
+    // Polymer({
+    //   is: 'codex-bounties',
+    // });
+
+    class Codex_bounties extends Polymer.Element {
+
+      static get is() {return 'Codex_bounties';}
+    }
+
+    customElements.define(Codex_bounties.is,Codex_bounties);
   </script>
 
 </dom-module>
