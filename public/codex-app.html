@@ -48,15 +48,25 @@
 
       app-drawer {
         background-color: #00897B;
-        --app-drawer-scrim-background: rgba(0,137,123,0.3);
       }
       app-drawer {
 
       }
       #nav-head {
-        background-color: #00897B
+        background-color: #00897B;
+        color: #fff;
       }
-      iron-selector {
+      iron-selector paper-button {
+        display: list-item;
+        text-align: center;
+        background-color: indigo;
+        margin-top: 5%;
+        color: #fff;
+        text-shadow: 2px 0px black;
+      }
+      codex-login {
+        margin-top: 10%;
+        text-align: center;
         display: list-item;
       }
     </style>
@@ -67,14 +77,14 @@
         <app-toolbar id="nav-head" >Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
           role="navigation" fallback-selection="404">
-            <paper-button name="home"> Home </paper-button>
-            <paper-button name="search"> Search </paper-button>
-            <paper-button name="bounties"> Bounties </paper-button>
-            <paper-button name="feed"> Your Feed </paper-button>
+            <paper-button raised class="indigo" name="home"> Home </paper-button>
+            <paper-button raised class="indigo" name="search"> Search </paper-button>
+            <paper-button raised class="indigo" name="bounties"> Bounties </paper-button>
+            <paper-button raised class="indigo" name="feed"> Your Feed </paper-button>
 
-            <paper-button name="profile"> Profile </paper-button>
-            <paper-button name="posts"> Posts </paper-button>
-            <paper-button name="saved"> Saved </paper-button>
+            <paper-button raised class="indigo" name="profile"> Profile </paper-button>
+            <paper-button raised class="indigo" name="posts"> Posts </paper-button>
+            <paper-button raised class="indigo" name="saved"> Saved </paper-button>
 
             <codex-login user="[[user]]"> </codex-login>
         </iron-selector>
