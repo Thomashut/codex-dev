@@ -1,8 +1,13 @@
+<head> <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet"> </head>
+
+<!-- Bower_components import -->
 <link rel="import" href="bower_components/polymer/polymer.html">
 
 <link rel="import" href="bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/vaadin-icons/vaadin-icons.html">
 
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
@@ -17,8 +22,9 @@
 <link rel="import" href="bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+<!-- End of Bower_components Import -->
 
-
+<!-- Custom Components Import -->
 <link rel="import" href="codex-login.html">
 <link rel="import" href="codex-home.html">
 <link rel="import" href="codex-404.html">
@@ -28,12 +34,18 @@
 <link rel="import" href="codex-profile.html">
 <link rel="import" href="codex-saved.html">
 <link rel="import" href="codex-search.html">
-
+<!-- End of Custom Components Import -->
 
 <dom-module id="codex-app">
   <template>
+    <head>
+      <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    </head>
 
     <style>
+      body {
+      font-family: 'Cabin', sans-serif;
+      }
       app-header {
         background-color: #00897B;
         color: #fff;
@@ -58,7 +70,7 @@
       }
       iron-selector paper-button {
         display: list-item;
-        text-align: center;
+        text-align: left;
         background-color: indigo;
         margin-top: 5%;
         color: #fff;
@@ -77,14 +89,14 @@
         <app-toolbar id="nav-head" >Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
           role="navigation" fallback-selection="404">
-            <paper-button raised class="indigo" name="home"> Home </paper-button>
-            <paper-button raised class="indigo" name="search"> Search </paper-button>
-            <paper-button raised class="indigo" name="bounties"> Bounties </paper-button>
-            <paper-button raised class="indigo" name="feed"> Your Feed </paper-button>
+            <paper-button raised class="indigo" name="home"> <iron-icon icon="vaadin:home"> </iron-icon> Home </paper-button>
+            <paper-button raised class="indigo" name="search"> <iron-icon icon="vaadin:search"> </iron-icon> Search </paper-button>
+            <paper-button raised class="indigo" name="bounties"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
+            <paper-button raised class="indigo" name="feed"> <iron-icon icon="vaadin:list-select"> </iron-icon> Your Feed </paper-button>
 
-            <paper-button raised class="indigo" name="profile"> Profile </paper-button>
-            <paper-button raised class="indigo" name="posts"> Posts </paper-button>
-            <paper-button raised class="indigo" name="saved"> Saved </paper-button>
+            <paper-button raised class="indigo" name="profile"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
+            <paper-button raised class="indigo" name="posts"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
+            <paper-button raised class="indigo" name="saved"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
 
             <codex-login user="[[user]]" page="[[page]]"> </codex-login>
         </iron-selector>
@@ -113,7 +125,6 @@
           <codex-profile name="profile"> </codex-profile>
           <codex-search name="search"> </codex-search>
           <codex-saved name="saved"> </codex-saved>
-
         </iron-pages>
 
       </app-header-layout>
