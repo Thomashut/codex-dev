@@ -1,18 +1,10 @@
-codex_<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
-<dom-module id="codex-login">
+<dom-module onload="ready" id="codex-login">
   <template>
-    <firebase-auth
-      id="auth"
-      user="{{user}}"
-      status-known="{{statusKnown}}"
-      provider="google">
-    </firebase-auth>
 
-    <paper-button raised on-tap="login" hidden$="[[user]]"> Sign In </paper-button>
-    <paper-button raised on-tap="logout" hidden$="[[!user]]"> Sign Out </paper-button>
-
+    <paper-button id="authBtn" raised on-tap="auth" > Sign In </paper-button>
 
   </template>
 
@@ -58,19 +50,53 @@ codex_<link rel="import" href="bower_components/polymerfire/firebase-auth.html">
         }
       }
 
+      ready() {
+        firebase.auth().onAuthStateChanged(function(user) {
+          var authbtn = Document.getElementById('authBtn');
+          if(user) {
+            authbtn.innerHTML = "Sign Out";
+            authbtn.setAttribute('on-tap','Logout');
+            this.$.user = user;
+          } else {
+            authbtn.innerHTML = "Sign In";
+            authbtn.setAttribute('on-tap','Login');
+          }
+        });
+      }
+
       login() {
-        this.$.page = "profile";
-        return this.$.auth.signInWithPopup();
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          var token = result.credential.accessToken;
+          var user = result.user;
+
+          var authbtn = Document.getElementById('authBtn');
+          authbtn.setAttribute('on-tap','logout');
+          authbtn.innerHTML = "Logout";
+
+          this.$.user = user;
+        }).catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          var email = error.email;
+          var credential = error.credential;
+
+          console.log("Error: " + error.message);
+        });
       }
 
       logout() {
-        return this.$.auth.signOut();
-      }
-
-      _userchanged2() {
-        console.log("User changed - Codex Login Level");
+        firebase.auth().signOut().then(function() {
+          var authbtn = Document.getElementById('authBtn');
+          authbtn.setAttribute('on-tap','login');
+          authbtn.innerHTML = "Login";
+        }).catch(function(error) {
+          console.log("Error: " + error.message);
+        });
       }
     }
+
 
     customElements.define(codex_login.is,codex_login);
   </script>
