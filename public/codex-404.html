@@ -6,9 +6,15 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-404',
-    });
+    // Polymer({
+    //   is: 'codex_404',
+    // });
+
+    class codex_404 extends Polymer.Element {
+      static get is() {return 'codex-404';};
+    }
+
+    customElements.define(codex_404.is,codex_404);
   </script>
 
 </dom-module>

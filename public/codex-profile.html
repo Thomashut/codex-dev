@@ -6,14 +6,28 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-profile',
-      properties: {
-        user: {
-          type: Object
+    // Polymer({
+    //   is: 'codex_profile',
+    //   properties: {
+    //     user: {
+    //       type: Object
+    //     }
+    //   }
+    // });
+
+    class codex_profile extends Polymer.Element {
+      static get is() {return 'codex-profile';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          }
         }
       }
-    });
+
+    }
+    customElements.define(codex_profile.is,codex_profile);
   </script>
 
 </dom-module>

@@ -4,14 +4,29 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-posts',
-      properties: {
-        user: {
-          type: Object
+    // Polymer({
+    //   is: 'codex_posts',
+    //   properties: {
+    //     user: {
+    //       type: Object
+    //     }
+    //   }
+    // });
+
+    class codex_posts extends Polymer.Element {
+      static get is() {return 'codex-posts';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          }
         }
       }
-    });
+
+    }
+
+    customElements.define(codex_posts.is,codex_posts);
   </script>
 
 </dom-module>

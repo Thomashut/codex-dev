@@ -4,9 +4,15 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-saved',
-    });
+    // Polymer({
+    //   is: 'codex_saved',
+    // });
+
+    class codex_saved extends Polymer.Element {
+      static get is() {return 'codex-saved';}
+    }
+
+    customElements.define(codex_saved.is,codex_saved);
   </script>
 
 </dom-module>

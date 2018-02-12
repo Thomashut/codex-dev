@@ -4,9 +4,16 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-bounties',
-    });
+    // Polymer({
+    //   is: 'codex_bounties',
+    // });
+
+    class codex_bounties extends Polymer.Element {
+
+      static get is() {return 'codex-bounties';}
+    }
+
+    customElements.define(codex_bounties.is,codex_bounties);
   </script>
 
 </dom-module>

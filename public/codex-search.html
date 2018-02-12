@@ -5,9 +5,15 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'codex-search',
-    });
+    // Polymer({
+    //   is: 'codex_search',
+    // });
+
+    class codex_search extends Polymer.Element {
+      static get is() {return 'codex-search';}
+    }
+
+    customElements.define(codex_search.is,codex_search);
   </script>
 
 </dom-module>
