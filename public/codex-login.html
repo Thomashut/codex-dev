@@ -47,28 +47,31 @@
         return {
           user: {
             type: Object,
-            observer: "_userchanged2"
+            reflectToAttribute: true,
+            notify: true
           },
           statusKnown: {
             type: Object
           },
           page: {
-            type: String
+            type: String,
+            reflectToAttribute: true,
+            notify: true
           }
         }
       }
 
       login() {
-        this.$.page = "profile";
-        return this.$.auth.signInWithPopup();
+        return this.$.auth.signInWithPopup().then(function(user){
+          this.page = "home";
+        }).catch(function(error) {
+          console.log(this.page)
+          console.log("Create a proper error message you lazy arse" + error.message);
+        });
       }
 
       logout() {
         return this.$.auth.signOut();
-      }
-
-      _userchanged2() {
-        console.log("User changed - Codex Login Level");
       }
     }
 
