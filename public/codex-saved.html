@@ -10,6 +10,16 @@
 
     class codex_saved extends Polymer.Element {
       static get is() {return 'codex-saved';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
+
     }
 
     customElements.define(codex_saved.is,codex_saved);

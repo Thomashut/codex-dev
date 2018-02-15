@@ -92,11 +92,11 @@
             <paper-button raised class="indigo" name="home"> <iron-icon icon="vaadin:home"> </iron-icon> Home </paper-button>
             <paper-button raised class="indigo" name="search"> <iron-icon icon="vaadin:search"> </iron-icon> Search </paper-button>
             <paper-button raised class="indigo" name="bounties"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
-            <paper-button raised class="indigo" name="feed"> <iron-icon icon="vaadin:list-select"> </iron-icon> Your Feed </paper-button>
+            <paper-button raised class="indigo" name="feed" hidden$="[[!user]]"> <iron-icon icon="vaadin:list-select"> </iron-icon> Your Feed </paper-button>
 
-            <paper-button raised class="indigo" name="profile"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
-            <paper-button raised class="indigo" name="posts"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
-            <paper-button raised class="indigo" name="saved"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
+            <paper-button raised class="indigo" name="profile" hidden$="[[!user]]"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
+            <paper-button raised class="indigo" name="posts" hidden$="[[!user]]"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
+            <paper-button raised class="indigo" name="saved" hidden$="[[!user]]"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
 
             <codex-login user="{{user}}" page="{{page}}"> </codex-login>
         </iron-selector>
@@ -115,16 +115,16 @@
 
 
         <iron-pages selected="{{page}}" attr-for-selected="name"
-          fallback-selection="404" role="main">
+          fallback-selection="home" role="main">
 
           <codex-home name="home"> </codex-home>
           <codex-404 name="404"> </codex-404>
           <codex-bounties name="bounties"> </codex-bounties>
-          <codex-feed name="feed"> </codex-feed>
-          <codex-posts name="posts"> </codex-posts>
-          <codex-profile name="profile"> </codex-profile>
+          <codex-feed user="{{user}}" name="feed"> </codex-feed>
+          <codex-posts user="{{user}}" name="posts"> </codex-posts>
+          <codex-profile user="{{user}}"name="profile"> </codex-profile>
           <codex-search name="search"> </codex-search>
-          <codex-saved name="saved"> </codex-saved>
+          <codex-saved user="{{user}}" name="saved"> </codex-saved>
         </iron-pages>
 
       </app-header-layout>
@@ -148,7 +148,8 @@
           },
           user: {
             type: Object,
-            reflectToAttribute: true
+            reflectToAttribute: true,
+            notify: true
           }
         }
       }

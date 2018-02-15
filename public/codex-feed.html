@@ -10,6 +10,15 @@
 
     class codex_feed extends Polymer.Element {
       static get is() {return 'codex-feed';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
     }
 
     customElements.define(codex_feed.is,codex_feed);

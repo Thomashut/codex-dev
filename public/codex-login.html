@@ -63,9 +63,9 @@
 
       login() {
         return this.$.auth.signInWithPopup().then(function(user){
-          this.page = "home";
+          this.$.page = "home";
         }).catch(function(error) {
-          console.log(this.page)
+          console.log(this.$.page);
           console.log("Create a proper error message you lazy arse" + error.message);
         });
       }

@@ -6,14 +6,6 @@
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_profile',
-    //   properties: {
-    //     user: {
-    //       type: Object
-    //     }
-    //   }
-    // });
 
     class codex_profile extends Polymer.Element {
       static get is() {return 'codex-profile';}
@@ -21,7 +13,8 @@
       static get properties() {
         return {
           user: {
-            type: Object
+            type: Object,
+            notify: true
           }
         }
       }
