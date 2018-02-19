@@ -1,18 +1,37 @@
 <dom-module id="codex-posts">
   <template>
     <h1> You have posted poop all mr. [[user.displayName]] </h1>
+
+    <h2> Create a New Post - <i>{Test Interface}</i> </h2>
+
+    <iron-form id="newPost">
+      <form enctype="application/json">
+        <input type="text" name="Post Title" required>
+        <input type="text" name="Post Description" required>
+        <input type="text" name="Releated Language" required>
+        <input type="checkbox" name="public">
+
+        <paper-button raised on-tap="submitPost" hidden$="[[!user]]"> Submit </paper-button>
+        <paper-button raised> Reset </paper-button>
+      </form>
+    </iron-form>
+
+
+    <h2> Created Posts - <i> {Test Interface} </i> </h2>
+    <firebase-document
+      id="postSave"
+      app-name="codex"
+      path='"posts/1"'
+      data="{{post}}">
+    </firebase-document>
+
+    <template is="dom-repeat" items="{{post}}" as="p">
+      <p> {{p}} </p>
+    </template>
+
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_posts',
-    //   properties: {
-    //     user: {
-    //       type: Object
-    //     }
-    //   }
-    // });
-
     class codex_posts extends Polymer.Element {
       static get is() {return 'codex-posts';}
 
@@ -21,11 +40,37 @@
           user: {
             type: Object,
             notify: true
+          },
+          post: {
+            type: Object,
+            observer: 'postsPulled',
+            notify: true
           }
         }
       }
+      submitPost() {
+          var form = this.$.newPost;
+          form.addEventListener('iron-form-presubmit', function(event) {
+            event.preventDefault();
+            console.log('presubmit fired');
+            console.log(form.serializeForm());
+
+            this.post = form.serializeForm();
+
+            var query = this.$.postSave;
+            // query.saveValue('/posts/1/');
+          });
+
+          form.submit();
+      }
+
+      postsPulled() {
+        console.log("posts loaded");
+        console.log(this.post);
+      }
 
     }
+
 
     customElements.define(codex_posts.is,codex_posts);
   </script>
