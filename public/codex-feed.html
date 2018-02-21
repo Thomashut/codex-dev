@@ -20,22 +20,22 @@
             <h4 class="rankings_header"> Rankings: </h4>
             <ul class="rank_list">
               <li> Concisness: [[post.conRank]]
-                <paper-button raised on-tap="incraseRank" rankType="0" post=[[post]]>
+                <paper-button raised on-tap="increaseCon" num="0" post=[[post]]>
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Well Explained: [[post.explainRank]]
-                <paper-button raised on-tap="incraseRank" rankType="1"  post="[[post]]">
+                <paper-button raised on-tap="increaseExplain" num="1"  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Link Strength: [[post.linkRank]]
-                <paper-button raised on-tap="incraseRank" rankType="2"  post="[[post]]">
+                <paper-button raised on-tap="increaseLink" num="2"  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> General Rank: [[post.rank]]
-                <paper-button raised on-tap="incraseRank"  rankType="3" post="[[post]]">
+                <paper-button raised on-tap="increaseRank"  num="3" post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
@@ -64,31 +64,32 @@
         }
       }
 
-      incraseRank(e) {
+      increaseCon(e) {
         var key = e.currentTarget.post.$key;
-        var type = e.currentTarget.rankType;
 
-        switch (type) {
-          case 0:
-            var newRank = parseInt(e.currentTarget.post.conRank) + 1;
-            this.$.query.ref.child(key).update({conRank: newRank});
-            break;
-          case 1:
-            var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
-            this.$.query.ref.child(key).update({explainRank: newRank});
-            break;
-          case 2:
-            var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
-            this.$.query.ref.child(key).update({linkRank: newRank});
-            break;
-          case 3:
-            var newRank = parseInt(e.currentTarget.post.rank) + 1;
-            this.$.query.ref.child(key).update({rank: newRank});
-            break;
-          default:
-            console.log("Create Propper Errors - Invalid Rank Increase");
-            break;
-          }
+        var newRank = parseInt(e.currentTarget.post.conRank) + 1;
+        this.$.allPosts.ref.child(key).update({conRank: newRank});
+      }
+
+      increaseExplain(e) {
+        var key = e.currentTarget.post.$key;
+
+        var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
+        this.$.allPosts.ref.child(key).update({explainRank: newRank});
+      }
+
+      increaseLink(e) {
+        var key = e.currentTarget.post.$key;
+
+        var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
+        this.$.allPosts.ref.child(key).update({linkRank: newRank});
+      }
+
+      increaseRank(e) {
+        var key = e.currentTarget.post.$key;
+
+        var newRank = parseInt(e.currentTarget.post.rank) + 1;
+        this.$.allPosts.ref.child(key).update({rank: newRank});
       }
     }
 
