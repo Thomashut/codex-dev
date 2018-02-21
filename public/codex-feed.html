@@ -1,12 +1,53 @@
 <dom-module id="codex-feed">
   <template>
-    <h1> Pretty Lonely </h1>
+    <firebase-auth user="{{user}}"></firebase-auth>
+
+    <!-- Only Ever Pull 50 records - Stop massive load spikes -->
+    <firebase-query
+      id="allPosts"
+      path="/posts"
+      data="{{posts}}"
+      limitToLast=50>
+    </firebase-query>
+
+    <div class="post_feed">
+      <ul id="post_list">
+        <template is="dom-repeat" items="[[posts]]" as="post">
+          <li>
+            <h3 class="post_title"> [[post.title]] </h3>
+            <h4 class="post_language"> [[post.language]] </h4>
+            <p class="post_content"> [[post.content]] </p>
+            <h4 class="rankings_header"> Rankings: </h4>
+            <ul class="rank_list">
+              <li> Concisness: [[post.conRank]]
+                <paper-button raised on-tap="incraseRank" rankType="0" post=[[post]]>
+                  <iron-icon icon="vaadin:plus"> </iron-icon>
+                </paper-button>
+              </li>
+              <li> Well Explained: [[post.explainRank]]
+                <paper-button raised on-tap="incraseRank" rankType="1"  post="[[post]]">
+                  <iron-icon icon="vaadin:plus"> </iron-icon>
+                </paper-button>
+              </li>
+              <li> Link Strength: [[post.linkRank]]
+                <paper-button raised on-tap="incraseRank" rankType="2"  post="[[post]]">
+                  <iron-icon icon="vaadin:plus"> </iron-icon>
+                </paper-button>
+              </li>
+              <li> General Rank: [[post.rank]]
+                <paper-button raised on-tap="incraseRank"  rankType="3" post="[[post]]">
+                  <iron-icon icon="vaadin:plus"> </iron-icon>
+                </paper-button>
+              </li>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </div>
+
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_feed',
-    // });
 
     class codex_feed extends Polymer.Element {
       static get is() {return 'codex-feed';}
@@ -16,8 +57,38 @@
           user: {
             type: Object,
             notify: true
+          },
+          posts: {
+            type: Object
           }
         }
+      }
+
+      incraseRank(e) {
+        var key = e.currentTarget.post.$key;
+        var type = e.currentTarget.rankType;
+
+        switch (type) {
+          case 0:
+            var newRank = parseInt(e.currentTarget.post.conRank) + 1;
+            this.$.query.ref.child(key).update({conRank: newRank});
+            break;
+          case 1:
+            var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
+            this.$.query.ref.child(key).update({explainRank: newRank});
+            break;
+          case 2:
+            var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
+            this.$.query.ref.child(key).update({linkRank: newRank});
+            break;
+          case 3:
+            var newRank = parseInt(e.currentTarget.post.rank) + 1;
+            this.$.query.ref.child(key).update({rank: newRank});
+            break;
+          default:
+            console.log("Create Propper Errors - Invalid Rank Increase");
+            break;
+          }
       }
     }
 
