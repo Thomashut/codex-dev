@@ -11,7 +11,7 @@
 
     <firebase-query
       id="query"
-      path="/posts/[[user.uid]]"
+      path="/posts"
       data="{{posts}}">
     </firebase-query>
 
@@ -31,12 +31,14 @@
     <div id="posts">
       <ul id="posts-list">
         <template is="dom-repeat" items="[[posts]]" as="post">
-          <li>
-            <h3 class="postTitle"> [[post.title]] </h3>
-            <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
-            <p class="postContent"> [[post.content]] </p>
-            <paper-button raised on-tap="remove" post="[[post]]"> Delete Post </paper-button>
-          </li>
+          <template is="dom-if" if="[[user.uid]] == [[post.uid]]">
+            <li>
+              <h3 class="postTitle"> [[post.title]] </h3>
+              <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
+              <p class="postContent"> [[post.content]] </p>
+              <paper-button raised on-tap="remove" post="[[post]]"> Delete Post </paper-button>
+            </li>
+          </template>
         </template>
       </ul>
     </div>
@@ -71,11 +73,16 @@
             return -1;
         }
 
-        // Create JSON object and push to database
+        // Create JSON object and push to database - initialize all ranks to 0
         this.$.query.ref.push({
+          uid: this.user.uid,
           title: this.$.draftTitle.value,
           language: this.$.draftLanguage.value,
           content: this.$.draftContent.value,
+          conRank: 0,
+          explainRank: 0,
+          linkRank: 0,
+          rank: 0
         });
 
         // Reset fields
