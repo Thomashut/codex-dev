@@ -20,22 +20,22 @@
             <h4 class="rankings_header"> Rankings: </h4>
             <ul class="rank_list">
               <li> Concisness: [[post.conRank]]
-                <paper-button raised on-tap="increaseCon" num="0" post=[[post]]>
+                <paper-button class="upVoteButton" raised on-tap="increaseCon" num="0" post=[[post]]>
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Well Explained: [[post.explainRank]]
-                <paper-button raised on-tap="increaseExplain" num="1"  post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseExplain" num="1"  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Link Strength: [[post.linkRank]]
-                <paper-button raised on-tap="increaseLink" num="2"  post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseLink" num="2"  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> General Rank: [[post.rank]]
-                <paper-button raised on-tap="increaseRank"  num="3" post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseRank"  num="3" post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
