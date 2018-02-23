@@ -10,32 +10,43 @@
       limitToLast=50>
     </firebase-query>
 
+    <firebase-query
+      id="addRank"
+      path=""
+      data={{test}}>
+    </firebase-query>
+
     <div class="post_feed">
       <ul id="post_list">
         <template is="dom-repeat" items="[[posts]]" as="post">
           <li>
+            <p> [[post.conRank.]]
             <h3 class="post_title"> [[post.title]] </h3>
             <h4 class="post_language"> [[post.language]] </h4>
             <p class="post_content"> [[post.content]] </p>
             <h4 class="rankings_header"> Rankings: </h4>
             <ul class="rank_list">
               <li> Concisness: [[post.conRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseCon" num="0" post=[[post]]>
+                <paper-button class="upVoteButton" raised on-tap="increaseCon" onload="readyButton"
+                  post=[[post]]>
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Well Explained: [[post.explainRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseExplain" num="1"  post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseExplain" onload="readyButton"
+                  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Link Strength: [[post.linkRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseLink" num="2"  post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseLink" onload="readyButton"
+                  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> General Rank: [[post.rank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseRank"  num="3" post="[[post]]">
+                <paper-button class="upVoteButton" raised on-tap="increaseRank" onload="readyButton"
+                  post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
@@ -59,36 +70,92 @@
             notify: true
           },
           posts: {
+            type: Object,
+            observer: "_postsPulled"
+          },
+          test: {
             type: Object
           }
         }
       }
 
-      increaseCon(e) {
-        var key = e.currentTarget.post.$key;
+      ready() {
+        super.ready();
+        console.log("ready");
+      }
 
+      _postsPulled() {
+        console.log(this.posts.length);
+      }
+
+      readyButton(e) {
+        console.log(e.currentTArget.innerHTML);
+      }
+
+      increaseCon(e) {
+
+        var key = e.currentTarget.post.$key;
         var newRank = parseInt(e.currentTarget.post.conRank) + 1;
-        this.$.allPosts.ref.child(key).update({conRank: newRank});
+
+        this.$.addRank.path = "/posts/" + key + "/conRankLog";
+
+        var voterLog = this.$.addRank.data;
+
+        var found = false;
+        var uid = this.user.uid;
+
+        for(var i = 0; i < voterLog.length; i++) {
+          if(voterLog[i].uid == uid) found = true;
+        }
+
+        if(!found) {
+          this.$.addRank.ref.push({
+            uid: this.user.uid
+          });
+
+          this.$.allPosts.ref.child(key).update({conRank: newRank});
+        }
+        else {
+          console.log("already voted - do a propper error message")
+        }
       }
 
       increaseExplain(e) {
         var key = e.currentTarget.post.$key;
-
         var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
+
+        this.$.addRank.path = "/posts/" + key + "/explainRankLog";
+
+        this.$.addRank.ref.push({
+          uid: this.user.uid
+        });
+
         this.$.allPosts.ref.child(key).update({explainRank: newRank});
       }
 
       increaseLink(e) {
         var key = e.currentTarget.post.$key;
-
         var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
+
+        this.$.addRank.path = "/posts/" + key + "/linkRankLog";
+
+        this.$.addRank.ref.push({
+          uid: this.user.uid
+        });
+
         this.$.allPosts.ref.child(key).update({linkRank: newRank});
       }
 
       increaseRank(e) {
         var key = e.currentTarget.post.$key;
-
         var newRank = parseInt(e.currentTarget.post.rank) + 1;
+
+        this.$.addRank.path = "/posts/" + key + "/rankLog";
+
+        this.$.addRank.ref.push({
+          uid: this.user.uid
+        });
+
         this.$.allPosts.ref.child(key).update({rank: newRank});
       }
     }
