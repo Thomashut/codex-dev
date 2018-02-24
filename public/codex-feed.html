@@ -12,8 +12,7 @@
 
     <firebase-query
       id="addRank"
-      path=""
-      data={{test}}>
+      path="">
     </firebase-query>
 
     <div class="post_feed">
@@ -27,25 +26,25 @@
             <h4 class="rankings_header"> Rankings: </h4>
             <ul class="rank_list">
               <li> Concisness: [[post.conRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseCon" onload="readyButton"
+                <paper-button class="upVoteButtonCon" raised on-tap="increaseCon" onload="readyButton"
                   post=[[post]]>
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Well Explained: [[post.explainRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseExplain" onload="readyButton"
+                <paper-button class="upVoteButtonExplain" raised on-tap="increaseExplain"  onload="readyButton"
                   post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Link Strength: [[post.linkRank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseLink" onload="readyButton"
+                <paper-button class="upVoteButtonLink" raised on-tap="increaseLink" onload="readyButton"
                   post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> General Rank: [[post.rank]]
-                <paper-button class="upVoteButton" raised on-tap="increaseRank" onload="readyButton"
+                <paper-button class="upVoteButtonRank" raised on-tap="increaseRank" onload="readyButton"
                   post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
@@ -71,93 +70,294 @@
           },
           posts: {
             type: Object,
-            observer: "_postsPulled"
-          },
-          test: {
-            type: Object
           }
         }
       }
 
-      ready() {
-        super.ready();
-        console.log("ready");
-      }
-
-      _postsPulled() {
-        console.log(this.posts.length);
-      }
-
       readyButton(e) {
-        console.log(e.currentTArget.innerHTML);
+        console.log(e.currentTarget.innerHTML);
       }
 
       increaseCon(e) {
-
         var key = e.currentTarget.post.$key;
-        var newRank = parseInt(e.currentTarget.post.conRank) + 1;
+        var localKey = key + "-c"
+        var rankCheck = localStorage.getItem(localKey);
+        if(rankCheck === "0" || rankCheck === null) { // Upvote the current Rank
+          var newRank = parseInt(e.currentTarget.post.conRank) + 1;
+
+          this.$.addRank.path = "/posts/" + key + "/conRankLog";
+
+          var voterLog = this.$.addRank.data;
+
+          var found = false;
+          var uid = this.user.uid;
+
+          for(var i = 0; i < voterLog.length; i++) {
+            if(voterLog[i].uid == uid) found = true;
+          }
+
+          if(!found) {
+            this.$.addRank.ref.push({
+              uid: this.user.uid
+            });
+
+            this.$.allPosts.ref.child(key).update({conRank: newRank});
+            e.currentTarget.childNodes[1].setAttribute('icon','vaadin:minus');
+            localStorage.setItem(localKey,"1");
+          }
+          else {
+            console.log("already voted - do a propper error message");
+          }
+        } else if(rankCheck == "1") { // Downvote the current Rank
+          this.decreaseCon(e);
+        } else {
+          console.log("Do propper errors - I haven't got a clue what happened");
+        }
+      }
+
+      decreaseCon(e) {
+        var key = e.currentTarget.post.$key;
+        var localKey = key + "-c"
+        var newRank = parseInt(e.currentTarget.post.conRank) - 1;
 
         this.$.addRank.path = "/posts/" + key + "/conRankLog";
 
         var voterLog = this.$.addRank.data;
 
         var found = false;
+        var objID = null; // Which user log object to delete
         var uid = this.user.uid;
 
         for(var i = 0; i < voterLog.length; i++) {
-          if(voterLog[i].uid == uid) found = true;
+          if(voterLog[i].uid == uid) {
+            found = true;
+            objID = voterLog[i].$key;
+            i = voterLog.length; // End loop
+          }
         }
 
-        if(!found) {
-          this.$.addRank.ref.push({
-            uid: this.user.uid
-          });
+        if(found && objID != null) {
+          this.$.addRank.ref.remove(this.$.addRank.child(objID).ref); // Remove User from voteLog
 
-          this.$.allPosts.ref.child(key).update({conRank: newRank});
+          this.$.allPosts.ref.child(key).update({conRank: newRank}); // Update Count
+          localStorage.removeItem(localKey); // Remove check from local Storage
+          e.currentTarget.childNodes[1].setAttribute('icon','vaadin:plus'); // Change buttonn icon
         }
         else {
-          console.log("already voted - do a propper error message")
+          console.log("attempted Downvote - do a propper error message");
         }
       }
 
       increaseExplain(e) {
         var key = e.currentTarget.post.$key;
-        var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
+        var localKey = key + "-e"
+        var rankCheck = localStorage.getItem(localKey);
+        if(rankCheck === "0" || rankCheck === null) { // Upvote the current Rank
+          var newRank = parseInt(e.currentTarget.post.explainRank) + 1;
+
+          this.$.addRank.path = "/posts/" + key + "/explainRankLog";
+
+          var voterLog = this.$.addRank.data;
+
+          var found = false;
+          var uid = this.user.uid;
+
+          for(var i = 0; i < voterLog.length; i++) {
+            if(voterLog[i].uid == uid) found = true;
+          }
+
+          if(!found) {
+            this.$.addRank.ref.push({
+              uid: this.user.uid
+            });
+
+            this.$.allPosts.ref.child(key).update({explainRank: newRank});
+            e.currentTarget.childNodes[1].setAttribute('icon','vaadin:minus');
+            localStorage.setItem(localKey,"1");
+          }
+          else {
+            console.log("already voted - do a propper error message");
+          }
+        } else if(rankCheck == "1") { // Downvote the current Rank
+          this.decreaseExplain(e);
+        } else {
+          console.log("Do propper errors - I haven't got a clue what happened");
+        }
+      }
+
+      decreaseExplain(e) {
+        var key = e.currentTarget.post.$key;
+        var localKey = key + "-e"
+        var newRank = parseInt(e.currentTarget.post.explainRank) - 1;
 
         this.$.addRank.path = "/posts/" + key + "/explainRankLog";
 
-        this.$.addRank.ref.push({
-          uid: this.user.uid
-        });
+        var voterLog = this.$.addRank.data;
 
-        this.$.allPosts.ref.child(key).update({explainRank: newRank});
+        var found = false;
+        var objID = null; // Which user log object to delete
+        var uid = this.user.uid;
+
+        for(var i = 0; i < voterLog.length; i++) {
+          if(voterLog[i].uid == uid) {
+            found = true;
+            objID = voterLog[i].$key;
+            i = voterLog.length; // End loop
+          }
+        }
+
+        if(found && objID != null) {
+          this.$.addRank.ref.remove(this.$.addRank.child(objID).ref); // Remove User from voteLog
+
+          this.$.allPosts.ref.child(key).update({explainRank: newRank}); // Update Count
+          localStorage.removeItem(localKey); // Remove check from local Storage
+          e.currentTarget.childNodes[1].setAttribute('icon','vaadin:plus'); // Change buttonn icon
+        }
+        else {
+          console.log("attempted Downvote - do a propper error message");
+        }
       }
 
       increaseLink(e) {
         var key = e.currentTarget.post.$key;
-        var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
+        var localKey = key + "-l"
+        var rankCheck = localStorage.getItem(localKey);
+        if(rankCheck === "0" || rankCheck === null) { // Upvote the current Rank
+          var newRank = parseInt(e.currentTarget.post.linkRank) + 1;
+
+          this.$.addRank.path = "/posts/" + key + "/linkRankLog";
+
+          var voterLog = this.$.addRank.data;
+
+          var found = false;
+          var uid = this.user.uid;
+
+          for(var i = 0; i < voterLog.length; i++) {
+            if(voterLog[i].uid == uid) found = true;
+          }
+
+          if(!found) {
+            this.$.addRank.ref.push({
+              uid: this.user.uid
+            });
+
+            this.$.allPosts.ref.child(key).update({linkRank: newRank});
+            e.currentTarget.childNodes[1].setAttribute('icon','vaadin:minus');
+            localStorage.setItem(localKey,"1");
+          }
+          else {
+            console.log("already voted - do a propper error message");
+          }
+        } else if(rankCheck == "1") { // Downvote the current Rank
+          this.decreaseLink(e);
+        } else {
+          console.log("Do propper errors - I haven't got a clue what happened");
+        }
+      }
+
+      decreaseLink(e) {
+        var key = e.currentTarget.post.$key;
+        var localKey = key + "-l"
+        var newRank = parseInt(e.currentTarget.post.linkRank) - 1;
 
         this.$.addRank.path = "/posts/" + key + "/linkRankLog";
 
-        this.$.addRank.ref.push({
-          uid: this.user.uid
-        });
+        var voterLog = this.$.addRank.data;
 
-        this.$.allPosts.ref.child(key).update({linkRank: newRank});
+        var found = false;
+        var objID = null; // Which user log object to delete
+        var uid = this.user.uid;
+
+        for(var i = 0; i < voterLog.length; i++) {
+          if(voterLog[i].uid == uid) {
+            found = true;
+            objID = voterLog[i].$key;
+            i = voterLog.length; // End loop
+          }
+        }
+
+        if(found && objID != null) {
+          this.$.addRank.ref.remove(this.$.addRank.child(objID).ref); // Remove User from voteLog
+
+          this.$.allPosts.ref.child(key).update({linkRank: newRank}); // Update Count
+          localStorage.removeItem(localKey); // Remove check from local Storage
+          e.currentTarget.childNodes[1].setAttribute('icon','vaadin:plus'); // Change buttonn icon
+        }
+        else {
+          console.log("attempted Downvote - do a propper error message");
+        }
       }
 
       increaseRank(e) {
         var key = e.currentTarget.post.$key;
-        var newRank = parseInt(e.currentTarget.post.rank) + 1;
+        var localKey = key + "-r"
+        var rankCheck = localStorage.getItem(localKey);
+        if(rankCheck === "0" || rankCheck === null) { // Upvote the current Rank
+          var newRank = parseInt(e.currentTarget.post.rank) + 1;
+
+          this.$.addRank.path = "/posts/" + key + "/rankLog";
+
+          var voterLog = this.$.addRank.data;
+
+          var found = false;
+          var uid = this.user.uid;
+
+          for(var i = 0; i < voterLog.length; i++) {
+            if(voterLog[i].uid == uid) found = true;
+          }
+
+          if(!found) {
+            this.$.addRank.ref.push({
+              uid: this.user.uid
+            });
+
+            this.$.allPosts.ref.child(key).update({rank: newRank});
+            e.currentTarget.childNodes[1].setAttribute('icon','vaadin:minus');
+            localStorage.setItem(localKey,"1");
+          }
+          else {
+            console.log("already voted - do a propper error message");
+          }
+        } else if(rankCheck == "1") { // Downvote the current Rank
+          this.decreaseRank(e);
+        } else {
+          console.log("Do propper errors - I haven't got a clue what happened");
+        }
+      }
+
+      decreaseRank(e) {
+        var key = e.currentTarget.post.$key;
+        var localKey = key + "-r";
+        var newRank = parseInt(e.currentTarget.post.rank) - 1;
 
         this.$.addRank.path = "/posts/" + key + "/rankLog";
 
-        this.$.addRank.ref.push({
-          uid: this.user.uid
-        });
+        var voterLog = this.$.addRank.data;
 
-        this.$.allPosts.ref.child(key).update({rank: newRank});
+        var found = false;
+        var objID = null; // Which user log object to delete
+        var uid = this.user.uid;
+
+        for(var i = 0; i < voterLog.length; i++) {
+          if(voterLog[i].uid == uid) {
+            found = true;
+            objID = voterLog[i].$key;
+            i = voterLog.length; // End loop
+          }
+        }
+
+        if(found && objID != null) {
+          this.$.addRank.ref.remove(this.$.addRank.child(objID).ref); // Remove User from voteLog
+
+          this.$.allPosts.ref.child(key).update({rank: newRank}); // Update Count
+          localStorage.removeItem(localKey); // Remove check from local Storage
+          e.currentTarget.childNodes[1].setAttribute('icon','vaadin:plus'); // Change buttonn icon
+        }
+        else {
+          console.log("attempted Downvote - do a propper error message");
+        }
       }
+
     }
 
     customElements.define(codex_feed.is,codex_feed);
