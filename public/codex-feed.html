@@ -17,41 +17,39 @@
 
     <div class="post_feed">
       <ul id="post_list">
-        <template is="dom-repeat" items="[[posts]]" as="post">
+        <template id="post_repeat" is="dom-repeat" items="[[posts]]" as="post">
           <li>
-            <p> [[post.conRank.]]
             <h3 class="post_title"> [[post.title]] </h3>
             <h4 class="post_language"> [[post.language]] </h4>
             <p class="post_content"> [[post.content]] </p>
             <h4 class="rankings_header"> Rankings: </h4>
             <ul class="rank_list">
               <li> Concisness: [[post.conRank]]
-                <paper-button class="upVoteButtonCon" raised on-tap="increaseCon" onload="readyButton"
-                  post=[[post]]>
+                <paper-button class="upVoteButtonCon" raised on-tap="increaseCon" post=[[post]]>
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Well Explained: [[post.explainRank]]
-                <paper-button class="upVoteButtonExplain" raised on-tap="increaseExplain"  onload="readyButton"
-                  post="[[post]]">
+                <paper-button class="upVoteButtonExplain" raised on-tap="increaseExplain" post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> Link Strength: [[post.linkRank]]
-                <paper-button class="upVoteButtonLink" raised on-tap="increaseLink" onload="readyButton"
-                  post="[[post]]">
+                <paper-button class="upVoteButtonLink" raised on-tap="increaseLink" post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
               <li> General Rank: [[post.rank]]
-                <paper-button class="upVoteButtonRank" raised on-tap="increaseRank" onload="readyButton"
-                  post="[[post]]">
+                <paper-button class="upVoteButtonRank" raised on-tap="increaseRank" post="[[post]]">
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
             </ul>
           </li>
         </template>
+
+        <!-- Displays fallback text if no posts are present -->
+        <div id="no_posts"></div>
       </ul>
     </div>
 
@@ -70,12 +68,20 @@
           },
           posts: {
             type: Object,
+            notify: true,
+            observer: "_dataChanged"
           }
         }
       }
 
-      readyButton(e) {
-        console.log(e.currentTarget.innerHTML);
+      // Method used to change fallback text dependent on number of posts
+      _dataChanged() {
+        console.log("fire");
+        if(this.posts.length <= 0) {
+          this.$.no_posts.innerHTML = "<h2> Sorry but there is no posts to Display - Please Check your  Internet Connection</h2>";
+        } else {
+          this.$.no_posts.innerHTML = "";
+        }
       }
 
       increaseCon(e) {
