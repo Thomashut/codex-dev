@@ -1,16 +1,176 @@
 <dom-module id="codex-bounties">
   <template>
-    <h1> Nothing to report on the bounty front </h1>
+    <h1> Bounties</h1>
+
+    <firebase-auth
+    user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="query"
+      path="/bounties"
+      data="{{bounties}}"
+      limitToLast="50">
+    </firebase-query>
+
+    <firebase-query
+      id="checkUp"
+      path=""
+      data="{{check}}">
+    </firebase-query>
+
+    <div id="bounties_board">
+      <ul id="bounty_list">
+        <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties">
+          <li class="bounty_item">
+            <h3> [[bounty.title]] - Rank: [[bounty.rank]] </h3>
+            <h4> [[bounty.language]] </h4>
+            <p> <i> Requested by: </i> [[bounty.poster]] </p>
+            <h4> Description: </h4>
+            <p> [[bounty.content]] </p>
+            <div id="voting_controls" hidden$="[[!user]]">
+              <p>
+                <paper-button raised id="upVote" on-tap="upVote" bounty="[[bounty]]">
+                  <iron-icon icon="vaadin:plus"> </iron-icon>
+                </paper-button>
+                <paper-button raised id="downVote" on-tap="downVote" bounty="[[bounty]]">
+                  <iron-icon icon="vaadin:minus"> </iron-icon>
+                </paper-button>
+              </p>
+            </div>
+          </li>
+        </template>
+      </ul>
+    </div>
+
+
+    <div id="makeARequest" hidden$="[[!user]]">
+      <h3> Make a Request </h3>
+      <paper-input id="bountyTitle" label="Enter a Post Title"></paper-input>
+      <paper-input id="bountyLanguage" label="Enter the Desired Language"></paper-input>
+      <paper-textarea id="bountyBody" label="Enter a Description of your Request"></paper-textarea>
+      <div id="requestControls">
+        <paper-button raised id="bountySubmit" on-tap="submit">Make a Request</paper-button>
+      </div>
+    </div>
+
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_bounties',
-    // });
 
     class codex_bounties extends Polymer.Element {
 
       static get is() {return 'codex-bounties';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          },
+          bounties: {
+            type: Object
+          }
+        };
+      }
+
+      submit() {
+        var bountyTitle = this.$.bountyTitle.value;
+        var bountyLanguage = this.$.bountyLanguage.value;
+        var bountyPoster = this.user.displayName;
+        var bountyContent = this.$.bountyBody.value;
+
+        // Push new bounty to the database as a JSON object
+        this.$.query.ref.push({
+          title: bountyTitle,
+          language: bountyLanguage,
+          poster: bountyPoster,
+          content: bountyContent,
+          rank : 0
+        });
+
+        // Empty input fields
+        this.$.bountyTitle.value = "";
+        this.$.bountyLanguage.value = "";
+        this.$.bountyBody.value = "";
+      }
+
+      upVote(e) {
+        var bountyKey = e.currentTarget.bounty.$key;
+        var userUID   = this.user.uid;
+
+        // Check the up-vote log to make sure the user hasn't already up-voted
+        this.$.checkUp.path = "/bounties/" + bountyKey + "/upVoteLog";
+
+        var upVoteLog = this.$.checkUp.data;
+        var found = false;
+        var objID = null; // used to delete uservote log object
+
+        for(var i = 0; i < upVoteLog.length && !found; i++) {
+          if(upVoteLog[i].uid == userUID) {
+            found = true;
+            objID = upVoteLog[i].$key;
+          }
+        }
+
+        if(!found) {
+          this.$.checkUp.ref.push({
+            uid: userUID
+          });
+
+          var newRank = parseInt(e.currentTarget.bounty.rank) + 1;
+          this.$.query.ref.child(bountyKey).update({rank: newRank});
+        } else { // User has already voted so remove their upvote
+          this.$.checkUp.ref.remove(this.$.checkUp.child(objID).ref);
+          var newRank = parseInt(e.currentTarget.bounty.rank) - 1;
+          this.$.query.ref.child(bountyKey).update({rank: newRank});
+        }
+      }
+
+      downVote(e) {
+        var bountyKey = e.currentTarget.bounty.$key;
+        var userUID   = this.user.uid;
+
+        // Check the up-vote log to make sure the user hasn't already up-voted
+        this.$.checkUp.path = "/bounties/" + bountyKey + "/downVoteLog";
+
+        var downVoteLog = this.$.checkUp.data;
+        var found = false;
+        var objID = null;
+
+        for(var i = 0; i < downVoteLog.length && !found; i++) {
+          if(downVoteLog[i].uid == userUID) {
+            objID = downVoteLog[i].$key;
+            found = true;
+          }
+        }
+
+        if(!found && objID == null) {
+          this.$.checkUp.ref.push({
+            uid: userUID
+          });
+
+          var newRank = parseInt(e.currentTarget.bounty.rank) - 1;
+          this.$.query.ref.child(bountyKey).update({rank: newRank});
+        } else { // User has already voted so remove their downVote
+          this.$.checkUp.ref.remove(this.$.checkUp.child(objID).ref);
+          var newRank = parseInt(e.currentTarget.bounty.rank) + 1;
+          this.$.query.ref.child(bountyKey).update({rank: newRank});
+        }
+      }
+
+      // Helper function for the dom-repeat so it can sort bounties by their rank
+      _sortBounties(a, b) {
+        var a = parseInt(a);
+        var b = parseInt(b);
+
+        if(a == b)
+          return 0;
+        else {
+          return  a < b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
+        }
+      }
+
+
     }
 
     customElements.define(codex_bounties.is,codex_bounties);
