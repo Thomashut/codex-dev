@@ -76,6 +76,7 @@
         // Create JSON object and push to database - initialize all ranks to 0
         this.$.query.ref.push({
           uid: this.user.uid,
+          author: this.user.displayName,
           title: this.$.draftTitle.value,
           language: this.$.draftLanguage.value,
           content: this.$.draftContent.value,
