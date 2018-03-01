@@ -1,16 +1,99 @@
 <dom-module id="codex-search">
   <template>
-    <h1> A Wild Search Page Has Appeared! </h1>
-    <h2> You Have Found Nothing! </h2>
+    <h1> Search </h1>
+
+    <firebase-auth
+      user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="query"
+      path="/posts"
+      data="{{results}}">
+    </firebase-query
+
+    <div id="searchControls">
+      <paper-input id="searchTag" label="Enter your Search Here"> </paper-input>
+      <paper-input id="searchLanguage" label="Enter a Specific Language Here"> </paper-input>
+      <paper-button raised id="search" on-tap="refreshSearch"> Search </paper-button>
+    </div>
+
+
+    <div id="searchResults">
+      <ul id="resultsList">
+        <template id="searchRepeat" is="dom-repeat" items="{{results}}" as="result" filter="_search">
+          <li class="searchItem">
+            <h3> [[result.title]] </h3>
+            <h3> [[result.language]] </h3>
+            <p> [[result.content]] </p>
+            <paper-button raised class="viewPostButton" on-tap="viewPost"> View Post </paper-button>
+          </li>
+        </template>
+      </ul>
+    </div>
+
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_search',
-    // });
 
     class codex_search extends Polymer.Element {
       static get is() {return 'codex-search';}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          },
+          results: {
+            type: Object
+          }
+        }
+      }
+
+      // Filter function for the template element to filter results
+      _search(result) {
+        if(!result) return false; // Have no data to filter
+
+        var searchTag = null;
+        var searchLanguage = null;
+
+        /* pre-compute these tags to save multiple computation later */
+        var resultTitle = result.title.toLowerCase();
+        var resultLanguage = result.language.toLowerCase();
+        var resultAuthor = result.author.toLowerCase();
+
+        if(this.$.searchTag.value) {
+          searchTag = this.$.searchTag.value.toLowerCase();
+        }
+
+        if(this.$.searchLanguage.value) {
+          searchLanguage = this.$.searchLanguage.value.toLowerCase();
+        }
+
+        if(!searchTag && !searchLanguage) return false; // No Search Entered
+        else if (searchTag && searchLanguage) { // Search on both the language and the tag
+          if((searchTag == resultTitle && searchLanguage == resultLanguage)
+                                       ||
+             (searchTag == resultAuthor && searchLanguage == resultLanguage)
+           ) return true;
+        } else if(searchTag && !searchLanguage) { // Search on just the tag
+          if(searchTag == resultTitle || searchTag == resultAuthor)
+            return true;
+        } else if(!searchTag && searchLanguage) { // Search on just the language
+          if(searchLanguage == resultLanguage)
+            return true;
+        } else return false; // Something strange happened so throw false
+      }
+
+      // User event handler to refresh the template when a new search is carried out
+      refreshSearch() {
+        this.$.searchRepeat.render(); // Re-render the result list. Will re-run the filter function
+      }
+
+      // to-do
+      viewPost(e) {
+        console.log("Not Yet Implimented")
+      }
     }
 
     customElements.define(codex_search.is,codex_search);
