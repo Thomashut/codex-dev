@@ -76,7 +76,6 @@
 
       // Method used to change fallback text dependent on number of posts
       _dataChanged() {
-        console.log("fire");
         if(this.posts.length <= 0) {
           this.$.no_posts.innerHTML = "<h2> Sorry but there is no posts to Display - Please Check your  Internet Connection</h2>";
         } else {
