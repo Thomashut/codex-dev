@@ -24,6 +24,8 @@
 <link rel="import" href="bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
 
+<link rel="import" href="bower_components/app-layout/app-layout.html">
+
 <link rel="import" href="bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
@@ -53,10 +55,14 @@
     <style>
       body {
       font-family: 'Cabin', sans-serif;
+      margin: 0px;
+      height: 100%;
+      width: 100%;
       }
       app-header {
         background-color: #00897B;
         color: #fff;
+        margin: 0px;
         width: 105%;
       }
       paper-icon-button {
@@ -64,13 +70,6 @@
       }
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
-      }
-
-      app-drawer {
-        background-color: #00897B;
-      }
-      app-drawer {
-
       }
       #nav-head {
         background-color: #00897B;
@@ -81,8 +80,12 @@
         text-align: left;
         background-color: indigo;
         margin-top: 5%;
+        width: 85%;
         color: #fff;
         text-shadow: 2px 0px black;
+      }
+      #drawer {
+        width: 105%;
       }
       codex-login {
         margin-top: 10%;
@@ -94,7 +97,8 @@
     <app-drawer-layout>
 
       <app-drawer slot="drawer">
-        <app-toolbar id="nav-head" >Navigate</app-toolbar>
+        <div id="drawer">
+        <app-toolbar id="nav-head">Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
           role="navigation" fallback-selection="404">
             <paper-button raised class="indigo" name="home"> <iron-icon icon="vaadin:home"> </iron-icon> Home </paper-button>
@@ -107,6 +111,7 @@
             <paper-button raised class="indigo" name="saved" hidden$="[[!user]]"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
 
             <codex-login user="{{user}}" page="{{page}}"> </codex-login>
+          </div>
         </iron-selector>
 
       </app-drawer>
@@ -121,19 +126,20 @@
         </app-header>
 
 
+        <div id="content">
+          <iron-pages selected="{{page}}" attr-for-selected="name"
+            fallback-selection="home" role="main">
 
-        <iron-pages selected="{{page}}" attr-for-selected="name"
-          fallback-selection="home" role="main">
-
-          <codex-home name="home"> </codex-home>
-          <codex-404 name="404"> </codex-404>
-          <codex-bounties name="bounties"> </codex-bounties>
-          <codex-feed name="feed"> </codex-feed>
-          <codex-posts name="posts"> </codex-posts>
-          <codex-profile user="{{user}}"name="profile"> </codex-profile>
-          <codex-search name="search"> </codex-search>
-          <codex-saved user="{{user}}" name="saved"> </codex-saved>
-        </iron-pages>
+            <codex-home name="home"> </codex-home>
+            <codex-404 name="404"> </codex-404>
+            <codex-bounties name="bounties"> </codex-bounties>
+            <codex-feed name="feed"> </codex-feed>
+            <codex-posts name="posts"> </codex-posts>
+            <codex-profile user="{{user}}"name="profile"> </codex-profile>
+            <codex-search name="search"> </codex-search>
+            <codex-saved user="{{user}}" name="saved"> </codex-saved>
+          </iron-pages>
+        </div>
 
       </app-header-layout>
     </app-drawer-layout>
@@ -160,6 +166,10 @@
             notify: true
           }
         }
+      }
+
+      openNav() {
+        this.$.drawer.toggle();
       }
     }
 
