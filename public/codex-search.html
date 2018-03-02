@@ -15,13 +15,20 @@
     <div id="searchControls">
       <paper-input id="searchTag" label="Enter your Search Here"> </paper-input>
       <paper-input id="searchLanguage" label="Enter a Specific Language Here"> </paper-input>
-      <paper-button raised id="search" on-tap="refreshSearch"> Search </paper-button>
+      <paper-listbox id="sortType" selected="0">
+        <paper-item> No Sort </paper-item>
+        <paper-item> Consiceness </paper-item>
+        <paper-item> Well Explained </paper-item>
+        <paper-item> Well Linked </paper-item>
+        <paper-item> General Rank </paper-item>
+      </paper-listbox>
+      <paper-button raised id="search" on-tap="refreshSearch"> Search and Sort </paper-button>
     </div>
 
 
     <div id="searchResults">
       <ul id="resultsList">
-        <template id="searchRepeat" is="dom-repeat" items="{{results}}" as="result" filter="_search">
+        <template id="searchRepeat" is="dom-repeat" items="{{results}}" as="result" filter="_search" sort="_sort">
           <li class="searchItem">
             <h3> [[result.title]] </h3>
             <h3> [[result.language]] </h3>
@@ -83,6 +90,38 @@
           if(searchLanguage == resultLanguage)
             return true;
         } else return false; // Something strange happened so throw false
+      }
+
+      // Helper function for the dom-repeat element to sort results on a specific criteria
+      _sort(a, b) {
+        var sortType = parseInt(this.$.sortType.selected);
+
+        switch (sortType) {
+          case 0: // No specific sort
+            return 0;
+          case 1: // Sort on Consiceness rank
+            if(a.conRank == b.conRank)
+              return 0;
+            else
+              return parseInt(a.conRank) < parseInt(b.conRank) ? -1 : 1;
+          case 2: // Sort on explain rank
+            if(a.explainRank ==  b.explainRank)
+              return 0;
+            else
+              return parseInt(a.explainRank) < parseInt(b.explainRank) ? -1 : 1;
+          case 3: // Sort on Link Rank
+            if(a.linkRank == b.linkRan)
+              return 0;
+            else
+              return  parseInt(a.linkRank) < parseInt(b.linkRank) ? -1 : 1;
+          case 4: // Sort on General Rank
+            if(a.rank == b.rank)
+              return 0;
+            else
+              return  parseInt(a.rank) < parseInt(b.rank) ? -1 : 1;
+          default: // Drop down menu is broken so do no specific sort
+            return 0;
+        }
       }
 
       // User event handler to refresh the template when a new search is carried out
