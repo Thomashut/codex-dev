@@ -1,0 +1,57 @@
+<dom-module id="codex-view">
+  <template>
+  <firebase-auth
+    user="{{user}}">
+  </firebase-auth>
+
+  <h1> View Post </h1>
+
+  <template is="dom-if" if="[[!post]]">
+      <p> ERROR - No Post Found <paper-button on-tap="home"> Return to Home </paper-button> </p>
+  </template>
+
+  <template is="dom-if" if="[[post]]">
+    <ul>
+      <li> [[post.title]] </li>
+      <li> [[post.language]] </li>
+      <li> [[post.author]] </li>
+      <li> [[post.content]] </li>
+
+      <br/>
+
+      <li> [[post.conRank]] </li>
+      <li> [[post.explainRank]] </li>
+      <li> [[post.linkRank]] </li>
+      <li> [[post.rank]] </li>
+    </ul>
+  </template>
+
+  </template>
+  <script>
+    class codex_view extends Polymer.Element {
+
+      static get is() {return "codex-view";}
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          },
+          post: {
+            type: Object
+          },
+          page: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
+
+      home() {
+        this.$.page = "home";
+      }
+    }
+
+    customElements.define(codex_view.is,codex_view);
+  </script>
+</dom-module>
