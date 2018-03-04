@@ -44,6 +44,7 @@
 <link rel="import" href="codex-profile.html">
 <link rel="import" href="codex-saved.html">
 <link rel="import" href="codex-search.html">
+<link rel="import" href="codex-view.html">
 <!-- End of Custom Components Import -->
 
 <dom-module id="codex-app">
@@ -109,6 +110,7 @@
             <paper-button raised class="indigo" name="profile" hidden$="[[!user]]"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
             <paper-button raised class="indigo" name="posts" hidden$="[[!user]]"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
             <paper-button raised class="indigo" name="saved" hidden$="[[!user]]"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
+            <paper-button raised class="indigo" name="view" hidden$="[[!post]]"> <iron-icon icon="vaadin:plus"> </iron-icon> View Post </paper-button>
 
             <codex-login user="{{user}}" page="{{page}}"> </codex-login>
           </div>
@@ -136,8 +138,9 @@
             <codex-feed name="feed"> </codex-feed>
             <codex-posts name="posts"> </codex-posts>
             <codex-profile user="{{user}}"name="profile"> </codex-profile>
-            <codex-search name="search"> </codex-search>
+            <codex-search name="search" page="{{page}}" post="{{post}}"> </codex-search>
             <codex-saved user="{{user}}" name="saved"> </codex-saved>
+            <codex-view name="view" post="{{post}}" page="{{page}}"> </codex-view>
           </iron-pages>
         </div>
 
@@ -164,6 +167,11 @@
             type: Object,
             reflectToAttribute: true,
             notify: true
+          },
+          post: {
+            type: Object,
+            notify: true,
+            value: null
           }
         }
       }

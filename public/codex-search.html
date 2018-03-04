@@ -33,7 +33,7 @@
             <h3> [[result.title]] </h3>
             <h3> [[result.language]] </h3>
             <p> [[result.content]] </p>
-            <paper-button raised class="viewPostButton" on-tap="viewPost"> View Post </paper-button>
+            <paper-button raised class="viewPostButton" on-tap="viewPost" post="[[result]]"> View Post </paper-button>
           </li>
         </template>
       </ul>
@@ -53,6 +53,14 @@
           },
           results: {
             type: Object
+          },
+          page: {
+            type: Object,
+            notify: true
+          },
+          post: {
+            type: Object,
+            notify: true
           }
         }
       }
@@ -131,7 +139,12 @@
 
       // to-do
       viewPost(e) {
-        console.log("Not Yet Implimented")
+        if(e.currentTarget.post){
+          this.post = e.currentTarget.post;
+          this.page = "view";
+        } else {
+          console.log("Error has occured, missing post")
+        }
       }
     }
 
