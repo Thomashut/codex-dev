@@ -23,6 +23,9 @@
       <li> [[post.explainRank]] </li>
       <li> [[post.linkRank]] </li>
       <li> [[post.rank]] </li>
+      <li> <paper-button id="saveButton" raised on-tap="savePost" post="[[post]]"
+              alreadySaved="false"> Save Post </paper-button>
+          </li>
     </ul>
   </template>
 
@@ -49,6 +52,27 @@
 
       home() {
         this.$.page = "home";
+      }
+
+      savePost(e) {
+        var postToSave = e.currentTarget.post;
+
+        if(!postToSave) {
+          console.log("Create Propper Error Messages - No Post to Save");
+          return -1;
+        }
+
+        // Intilizse the saved List
+        if(!localStorage.getItem("savedPosts")) {
+          var savedPosts = new Array();
+          savedPosts.push(postToSave);
+          localStorage.setItem("savedPosts",JSON.stringify(savedPosts));
+        } else {
+          var savedPosts = JSON.parse(localStorage.getItem("savedPosts"))
+          localStorage.removeItem("savedPosts"); // Clear local Storage
+          savedPosts.push(postToSave);
+          localStorage.setItem("savedPosts",JSON.stringify(savedPosts));
+        }
       }
     }
 

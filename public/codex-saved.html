@@ -1,13 +1,37 @@
 <dom-module id="codex-saved">
   <template>
-    <h1> I Do Not Understand the Concept of saving? </h1>
+    <firebase-auth
+      user="{{user}}">
+    </firebase-auth>
+    <h1> Saved Posts </h1>
+
+    <template is="dom-if" if="[[!saved]]">
+      <h3> No Saved Posts </h3>
+      <p> To save a post view that post's detailed page and select the save
+          post option. <br/>
+
+          Also make sure to not clear your local storage as that will delete
+          any saved posts
+      </p>
+    </template>
+
+
+    <ul id="savedList">
+      <template is="dom-repeat" items="[[saved]]" as="post">
+        <li>
+          <h3> [[post.title]] </h3>
+          <h4> [[post.language]] </h4>
+          <h4> Author: [[post.author]] </h4>
+          <p> [[post.content]] </p>
+          <paper-button raised on-tap="deletePost" post="[[post]]"> Delete </paper-button>
+        </li>
+      </template>
+    </ul>
+
+    <paper-button raised on-tap="ready"> Reload Saved </paper-button>
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_saved',
-    // });
-
     class codex_saved extends Polymer.Element {
       static get is() {return 'codex-saved';}
 
@@ -16,8 +40,31 @@
           user: {
             type: Object,
             notify: true
+          },
+          saved: {
+            type: Object
           }
         }
+      }
+
+      ready() {
+        super.ready();
+        if(localStorage.getItem("savedPosts")) {
+          this.saved = JSON.parse(localStorage.getItem("savedPosts"));
+        }
+      }
+
+      deletePost(e) {
+        var post = e.currentTarget.post;
+        var index = this.saved.indexOf(post);
+
+        console.log(this.saved);
+        this.saved.splice(index,1); // Remove item from the array
+        console.log(this.saved);
+
+        localStorage.removeItem("savedPosts");
+        localStorage.setItem("savedPosts",JSON.stringify(this.saved));
+        this.ready(); // Reload the list
       }
 
     }
