@@ -44,6 +44,7 @@
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
+              <paper-button raised class="viewPostButton" on-tap="viewPost" post="[[post]]">View Post</paper-button>
             </ul>
           </li>
         </template>
@@ -70,6 +71,14 @@
             type: Object,
             notify: true,
             observer: "_dataChanged"
+          },
+          post: {
+            type: Object,
+            notify: true
+          },
+          page: {
+            type: Object,
+            notify: true
           }
         }
       }
@@ -360,6 +369,15 @@
         }
         else {
           console.log("attempted Downvote - do a propper error message");
+        }
+      }
+
+      viewPost(e) {
+        if(e.currentTarget.post) {
+          this.post = e.currentTarget.post;
+          this.page = "view";
+        } else {
+          console.log("ERROR - No Post to View (Make proper error messages)");
         }
       }
 
