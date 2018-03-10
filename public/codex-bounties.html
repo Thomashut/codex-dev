@@ -38,6 +38,10 @@
                 </paper-button>
               </p>
             </div>
+            <template is="dom-if" if="[[user.uid]] == [[bounty.posterUID]]">
+              <paper-button raised class="markButton" on-tap="markAsComplete"
+                bounty="[[bounty]]"> Mark as Complete </paper-button>
+            </template>
           </li>
         </template>
       </ul>
@@ -84,6 +88,7 @@
           title: bountyTitle,
           language: bountyLanguage,
           poster: bountyPoster,
+          posterUID: this.user.uid,
           content: bountyContent,
           rank : 0
         });
@@ -167,6 +172,19 @@
           return 0;
         else {
           return  a < b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
+        }
+      }
+
+      markAsComplete(e) {
+        if(e.currentTarget.bounty) {
+          var bounty = e.currentTarget.bounty;
+          if(bounty.posterUID == this.user.uid) {
+            this.$.query.ref.child(bounty.$key).remove();
+          } else {
+            console.log("ERROR - NOT MATCHING UIDs - CReATE PROPPER ERROR MESSAGES")
+          }
+        } else {
+          console.log("ERROR - NO BOUNTY - CREATE PROPPER ERROR MESSAGES")
         }
       }
 
