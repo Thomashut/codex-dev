@@ -1,8 +1,29 @@
 <dom-module id="codex-profile">
   <template>
+    <style>
+      .profile_image {
+        width: 250px;
+        height: 250px;
+
+        border-radius: 150px;
+        border: black solid 2px;
+      }
+    </style>
+
+
+    <firebase-auth
+      user="{{user}}">
+    </firebase-auth>
+
     <template is="dom-if" if="[[user]]">
       <h1> Hi [[user.displayName]] </h1>
-      <img src="[[user.photoURL]]" alt="Your Profile image"/>
+      <img class="profile_image"src="[[user.photoURL]]" alt="Your Profile image"/>
+
+      <paper-button raised class="view" on-tap="viewPosts"> View Your Posts </paper-button>
+    </template>
+
+    <template is="dom-if" if="[[!user]]">
+      <h2> ERROR - Could not pull user profile data. Please Re-login and try again </h2>
     </template>
   </template>
 
@@ -16,8 +37,16 @@
           user: {
             type: Object,
             notify: true
+          },
+          page: {
+            type: Object,
+            notify: true
           }
         }
+      }
+
+      viewPosts() {
+        this.page = "posts";
       }
 
     }
