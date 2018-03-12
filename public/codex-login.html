@@ -31,25 +31,21 @@
             type: Object
           },
           page: {
-            type: String,
-            reflectToAttribute: true,
+            type: Object,
             notify: true
           }
         }
       }
 
       login() {
-        return this.$.auth.signInWithPopup().then(function(user){
-          this.$.page = "home";
-        }).catch(function(error) {
-          console.log(this.$.page);
-          console.log("Create a proper error message you lazy arse" + error.message);
-        });
+        this.$.auth.signInWithPopup();
+        console.log(this.page);
       }
 
       logout() {
-        return this.$.auth.signOut();
+        this.$.auth.signOut();
       }
+
     }
 
     customElements.define(codex_login.is,codex_login);

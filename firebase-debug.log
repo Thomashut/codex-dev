@@ -1,0 +1,41 @@
+[debug] [2018-03-12T15:02:02.067Z] ----------------------------------------------------------------------
+[debug] [2018-03-12T15:02:02.075Z] Command:       /usr/bin/node /usr/local/bin/firebase serve -p 5001 --only hosting
+[debug] [2018-03-12T15:02:02.077Z] CLI Version:   3.17.4
+[debug] [2018-03-12T15:02:02.077Z] Platform:      linux
+[debug] [2018-03-12T15:02:02.077Z] Node Version:  v6.11.4
+[debug] [2018-03-12T15:02:02.077Z] Time:          Mon Mar 12 2018 15:02:02 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:02.077Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-03-12T15:02:02.149Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-03-12T15:02:02.150Z] > authorizing via signed-in user
+[debug] [2018-03-12T15:02:02.156Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-03-12T15:02:02.158Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/8ZQlTyoIWF0AquK-RHdR_pE4hYYYgClw9ln6dogldjM',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Mon Mar 12 2018 15:02:02 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:02.540Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-12T15:02:02.577Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/codex-8eb0b  
+  
+ Mon Mar 12 2018 15:02:02 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:03.429Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-12T15:02:03.436Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/codex-8eb0b/tokens  
+  
+ Mon Mar 12 2018 15:02:03 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:04.155Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/home/tom/repos/codex-dev/codex-dev'...
+[info] 
+[debug] [2018-03-12T15:02:04.173Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/codex-8eb0b  
+  
+ Mon Mar 12 2018 15:02:04 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:04.973Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-12T15:02:04.980Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/790367278764/clients/_:getWebAppConfig  
+  
+ Mon Mar 12 2018 15:02:04 GMT+0000 (GMT)
+[debug] [2018-03-12T15:02:05.496Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5001
+
