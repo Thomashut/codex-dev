@@ -4,13 +4,23 @@
     user="{{user}}">
   </firebase-auth>
 
+  <firebase-query
+    id="posts"
+    path="/posts"
+    data="{{posts}}">
+  </firebase-query>
+
   <h1> View Post </h1>
 
   <template is="dom-if" if="[[!post]]">
-      <p> ERROR - No Post Found <paper-button on-tap="home"> Return to Home </paper-button> </p>
+      <p> No Post Found <paper-button on-tap="home"> Return to Home </paper-button> </p>
   </template>
 
-  <template is="dom-if" if="[[post]]">
+  <template id="postView" is="dom-if" if="[[post]]">
+    <template id="returnView" is="dom-if" if="[[post.parentTag]]">
+      <paper-button raised on-tap="previous" post="[[post]]"> Return to the Previous Post </paper-button>
+    </template>
+
     <ul>
       <li> [[post.title]] </li>
       <li> [[post.language]] </li>
@@ -29,6 +39,17 @@
     </ul>
   </template>
 
+  <h4> Tagged Posts </h4>
+  <paper-button raised on-tap="refreshTags"> Load Tagged Posts </paper-button>
+  <ul>
+    <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter">
+        <li> [[tag.title]] </li>
+        <li> [[tag.language]] </li>
+        <li> [[tag.author]] </li>
+        <paper-button raised on-tap="viewTag" tag="[[tag]]"> View Tag </paper-button>
+    </template>
+  </ul>
+
   </template>
   <script>
     class codex_view extends Polymer.Element {
@@ -43,10 +64,25 @@
           post: {
             type: Object
           },
+          posts: {
+            type: Object,
+            notify: true
+          },
           page: {
             type: Object,
             notify: true
           }
+        }
+      }
+
+      ready() {
+        super.ready();
+        this.$.postView.render(); // Refresh the post template
+        if(this.$.tagRepeat) {
+          this.$.tagRepeat.render();
+        }
+        if(this.$.returnView) {
+          this.$.returnView.render();
         }
       }
 
@@ -73,6 +109,42 @@
           savedPosts.push(postToSave);
           localStorage.setItem("savedPosts",JSON.stringify(savedPosts));
         }
+      }
+
+      _filter(result) {
+        if(!this.post) {return false;}
+        if(!result) {return false;}
+        var queryKey = result.$key;
+        var postTags = JSON.parse(this.post.taggedPosts);
+        console.log("QK: " + queryKey + " PT " + postTags);
+
+        if(postTags.length <= 0) {return false;} // No tags
+        else {
+          for(var i = 0; i < postTags.length; i++) {
+            if(postTags[i] == queryKey) return true;
+          }
+        }
+      }
+
+      viewTag(e) {
+          var currentTag = e.currentTarget.tag;
+          if(!currentTag) {
+            console.log("ERROR - MISSING TAG");
+            return -1;
+          }
+
+          currentTag.parentTag = this.post; // Used so the user can go back up the trail
+          this.post = currentTag;
+          this.ready(); // Refresh the page
+      }
+
+      previous(e) {
+        this.post = this.post.parentTag; // Current post become equal to the parent post
+        this.ready(); // Refresh the page
+      }
+
+      refreshTags() {
+        this.ready();
       }
     }
 
