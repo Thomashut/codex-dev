@@ -14,6 +14,12 @@
       path="/posts"
       data="{{posts}}">
     </firebase-query>
+    <firebase-query
+      id="search"
+      path="/posts"
+      data="{{searchResults}}"
+      limitToLast="50">
+    </firebase-query>
 
     <h1> [[user.displayName]]'s Posts </h1>
 
@@ -22,6 +28,30 @@
     <paper-input id="draftTitle" label="Title"></paper-input>
     <paper-input id="draftLanguage" label="Language"></paper-input>
     <paper-textarea id="draftContent" label="Content"></paper-textarea>
+    <div id="post-tag">
+      <h3> Tagged Posts </h3>
+      <paper-listbox id="taggedPosts">
+
+      </paper-listbox>
+    </div>
+    <div id="searchResults">
+      <div id="searchControls">
+        <paper-input id="searchTitle" label="Enter Author or Title Here"> </paper-input>
+        <paper-input id="searchLanguage" label="Enter Desired Language Here"> </paper-input>
+        <paper-button id="commitSearch" on-tap="search"> Search </paper-button>
+      </div>
+      <ul class="searchList">
+        <template id="searchRepeat" is="dom-repeat" items="{{searchResults}}" as="result" filter="_filterPosts">
+          <li>
+            <h3> [[result.title]] </h3>
+            <h3> [[result.language]] </h3>
+            <h4> [[result.author]] </h4>
+            <paper-button raised on-tap="viewPost" post="{{result}}"> View Post </paper-button>
+            <paper-button raised on-tap="tagPost" post="{{result}}" remove="false"> Tag post </paper-button>
+          </li>
+        </template>
+      </ul>
+    </div>
     <div id="draft-controls">
       <paper-button raised id="create" on-tap="create">Upload Post</paper-button>
     </div>
@@ -58,12 +88,27 @@
           },
           posts: {
             type: Object,
+          },
+          post: {
+            type: Object,
+            notify: true
+          },
+          page: {
+            type: Object,
+            notify: true
           }
         }
       }
 
+    ready() {
+      super.ready();
+      if(localStorage.getItem("taggedPosts")) {
+        localStorage.removeItem("taggedPosts"); // Clean up if user closed application before submitting
+      }
+    }
+
       // Creates post
-      create() {
+    create() {
         // Check valid data
         if(this.$.draftTitle.value == null ||
             this.$.draftLanguage.value == null ||
@@ -72,6 +117,13 @@
             console.log("Create propper error messages - Missing Fields");
             return -1;
         }
+
+        var taggedPosts = new Array(); // If user has no tags then this will just be empty
+        if(localStorage.getItem("taggedPosts")) { // Get tagged posts
+          taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
+        }
+
+        taggedPosts = JSON.stringify(taggedPosts); // Prep posts for storage
 
         // Create JSON object and push to database - initialize all ranks to 0
         this.$.query.ref.push({
@@ -83,13 +135,18 @@
           conRank: 0,
           explainRank: 0,
           linkRank: 0,
-          rank: 0
+          rank: 0,
+          taggedPosts: taggedPosts
         });
 
         // Reset fields
         this.$.draftTitle.value = null;
         this.$.draftLanguage.value = null;
         this.$.draftContent.value = null;
+        localStorage.removeItem('taggedPosts');
+        for(var i = 0; i < this.$.taggedPosts.childNodes; i++) { // Remove all tagged posts
+          this.$.taggedPosts.removeChild(this.$.taggedPosts.childNodes[i]);
+        }
     }
 
     // e = event, Will delete a user's post
@@ -98,7 +155,115 @@
       this.$.query.ref.child(key).remove();
     }
 
+    // Re-renders the search dom template
+    search() {
+      this.$.searchRepeat.render();
     }
+
+    viewPost(e) {
+      if(e.currentTarget.post){
+        this.post = e.currentTarget.post;
+        this.page = "view";
+      } else {
+        console.log("Error has occured, missing post")
+      }
+    }
+
+    _filterPosts(result) {
+      if(!result) return false; // Have no data to filter
+
+      var searchTag = null;
+      var searchLanguage = null;
+
+      /* pre-compute these tags to save multiple computation later */
+      var resultTitle = result.title.toLowerCase();
+      var resultLanguage = result.language.toLowerCase();
+      var resultAuthor = result.author.toLowerCase();
+
+      if(this.$.searchTitle.value) {
+        searchTag = this.$.searchTitle.value.toLowerCase();
+      }
+
+      if(this.$.searchLanguage.value) {
+        searchLanguage = this.$.searchLanguage.value.toLowerCase();
+      }
+
+      if(!searchTag && !searchLanguage) return false; // No Search Entered
+      else if (searchTag && searchLanguage) { // Search on both the language and the tag
+        if((searchTag == resultTitle && searchLanguage == resultLanguage)
+                                     ||
+           (searchTag == resultAuthor && searchLanguage == resultLanguage)
+         ) return true;
+      } else if(searchTag && !searchLanguage) { // Search on just the tag
+        if(searchTag == resultTitle || searchTag == resultAuthor)
+          return true;
+      } else if(!searchTag && searchLanguage) { // Search on just the language
+        if(searchLanguage == resultLanguage)
+          return true;
+      } else return false; // Something strange happened so throw false
+    }
+
+    tagPost(e) {
+      if(e.currentTarget.remove == "true") { // Remove the tag from the list
+        e.currentTarget.remove = "false";
+        var taggedPosts = this.$.taggedPosts.childNodes;
+        for(var i = 0; i < taggedPosts.length; i++) {
+          if(taggedPosts[i].post) {
+            if(taggedPosts[i].post.$key == e.currentTarget.post.$key) {
+              var localTags = JSON.parse(localStorage.getItem("taggedPosts"));
+              this.$.taggedPosts.removeChild(taggedPosts[i]); // Remove tag from user-side list
+              for(var j = 0; j < localTags.length; j++) {
+                if(localTags[j] == e.currentTarget.post.$key) {
+                  localTags.splice(j,1);
+                  localStorage.setItem("taggedPosts",JSON.stringify(localTags));
+                }
+              }
+              e.currentTarget.innerHTML = "Add Tag";
+            }
+          }
+        }
+      } else {
+        if(localStorage.getItem("taggedPosts") && e.currentTarget.post) {
+          var taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
+          if(taggedPosts.indexOf(e.currentTarget.post.$key) == -1) {
+            taggedPosts.push(e.currentTarget.post.$key);
+            var newNode = document.createElement("paper-item");
+
+            newNode.post = e.currentTarget.post;
+            newNode.innerHTML = "<p>" + newNode.post.title + "</p>";
+
+            this.$.taggedPosts.appendChild(newNode);
+            e.currentTarget.remove = "true";
+            e.currentTarget.innerHTML = "Remove Tag";
+
+            localStorage.setItem("taggedPosts",JSON.stringify(taggedPosts));
+          } else {
+            console.log("Error - Post alredy tagged ");
+          }
+        } else {
+          var taggedPosts = new Array();
+          if(e.currentTarget.post) {
+            taggedPosts.push(e.currentTarget.post.$key);
+            var newNode = document.createElement("paper-item");
+
+            newNode.post = e.currentTarget.post
+            newNode.innerHTML = "<p>" + e.currentTarget.post.title + "</p>";
+
+            this.$.taggedPosts.appendChild(newNode);
+            e.currentTarget.remove = "true";
+            e.currentTarget.innerHTML = "Remove Tag";
+
+            localStorage.setItem("taggedPosts",JSON.stringify(taggedPosts));
+          }
+        }
+      }
+    }
+
+
+
+  }
+
+
 
 
     customElements.define(codex_posts.is,codex_posts);
