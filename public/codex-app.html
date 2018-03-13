@@ -129,7 +129,7 @@
 
 
         <div id="content">
-          <iron-pages selected="{{page}}" attr-for-selected="name"
+          <iron-pages id="ironPages" selected="{{page}}" attr-for-selected="name"
             fallback-selection="home" role="main">
 
             <codex-home name="home"> </codex-home>
@@ -174,6 +174,16 @@
             value: null
           }
         }
+      }
+
+      ready() {
+        super.ready();
+        this.$.ironPages.addEventListener("selected-item-changed",function(e) {
+          if(e.currentTarget.selected == "404") {
+            console.log("Error - invalid Page Access");
+            // e.currentTarget.select("home");
+          }
+        });
       }
 
       openNav() {
