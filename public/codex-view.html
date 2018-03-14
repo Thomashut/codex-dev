@@ -42,7 +42,7 @@
   <h4> Tagged Posts </h4>
   <paper-button raised on-tap="refreshTags"> Load Tagged Posts </paper-button>
   <ul>
-    <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter">
+    <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter" observe="post">
         <li> [[tag.title]] </li>
         <li> [[tag.language]] </li>
         <li> [[tag.author]] </li>
@@ -134,17 +134,28 @@
           }
 
           currentTag.parentTag = this.post; // Used so the user can go back up the trail
+          this.post = null;
+          this.page = "home";
           this.post = currentTag;
           this.ready(); // Refresh the page
+          this.$.tagRepeat.render();
+          this.page = "view";
       }
 
       previous(e) {
-        this.post = this.post.parentTag; // Current post become equal to the parent post
+        var post = this.post;
+        this.post = null;
+        this.post = post.parentTag; // Current post become equal to the parent post
+        this.page = "home";
+        this.page = "view";
         this.ready(); // Refresh the page
+        this.$.tagRepeat.render();
       }
 
       refreshTags() {
+        this.page = "home";
         this.ready();
+        this.page = "view";
       }
     }
 
