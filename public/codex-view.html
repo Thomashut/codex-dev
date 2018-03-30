@@ -10,6 +10,12 @@
     data="{{posts}}">
   </firebase-query>
 
+  <firebase-query
+    id="commentQuery"
+    path="/posts/[[post.$key]]/comments"
+    data="{{comments}}">
+  </firebase-query>
+
   <h1> View Post </h1>
 
   <template is="dom-if" if="[[!post]]">
@@ -50,6 +56,22 @@
     </template>
   </ul>
 
+  <h4> Discussion Section </h4>
+  <div id="postComment">
+    <paper-input id="commentBody" label="Post Comment"></paper-input>
+    <paper-button raised on-tap="saveComment"> Save Button </paper-button>
+  </div>
+
+
+  <paper-button raised on-tap="refreshComments"> Load Comments </paper-button>
+  <ul>
+    <template id="commentRepeat" is="dom-repeat" items="{{comments}}" as="comment">
+      <li> <img src="[[comment.authorURL]]" alt="User Image"/>
+      <li> [[comment.author]] </li>
+      <li> [[comment.body]] </li>
+    </template>
+  </ul>
+
   </template>
   <script>
     class codex_view extends Polymer.Element {
@@ -71,6 +93,10 @@
           page: {
             type: Object,
             notify: true
+          },
+          comments: {
+            type: Object,
+            notify: true
           }
         }
       }
@@ -83,6 +109,10 @@
         }
         if(this.$.returnView) {
           this.$.returnView.render();
+        }
+        if(this.$.commentRepeat && this.post) {
+          this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
+          this.$.commentRepeat.render();
         }
       }
 
@@ -142,6 +172,32 @@
           this.page = "view";
       }
 
+      saveComment(e) {
+        if(!this.$.commentBody || !this.post) {
+          console.log("Need Proper Errors - No Comment to post or post to comment on");
+          return -1;
+        }
+
+        var commentBobdy = this.$.commentBody.value;
+        var key = this.post.$key;
+
+        this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
+
+        var photoURL = null;
+        if(this.user.photoURL) {
+          photoURL = this.user.photoURL
+        }
+
+        this.$.commentQuery.ref.push({
+          authorURL: photoURL,
+          body: this.$.commentBody.value,
+          author: this.user.displayName
+        }); // Push the comment to the database
+
+        this.$.commentBody.value = "";
+
+      }
+
       previous(e) {
         var post = this.post;
         this.post = null;
@@ -156,6 +212,10 @@
         this.page = "home";
         this.ready();
         this.page = "view";
+      }
+
+      refreshComments() {
+        this.ready();
       }
     }
 
