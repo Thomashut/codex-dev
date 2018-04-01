@@ -5,6 +5,11 @@
         display: block;
         padding: 10px;
       }
+
+      .feedItem {
+        margin: 10px;
+        width: 80%;
+      }
     </style>
 
     <firebase-auth user="{{user}}"></firebase-auth>
@@ -40,17 +45,18 @@
         <paper-input id="searchLanguage" label="Enter Desired Language Here"> </paper-input>
         <paper-button id="commitSearch" on-tap="search"> Search </paper-button>
       </div>
-      <ul class="searchList">
         <template id="searchRepeat" is="dom-repeat" items="{{searchResults}}" as="result" filter="_filterPosts">
-          <li>
-            <h3> [[result.title]] </h3>
-            <h3> [[result.language]] </h3>
-            <h4> [[result.author]] </h4>
-            <paper-button raised on-tap="viewPost" post="{{result}}"> View Post </paper-button>
-            <paper-button raised on-tap="tagPost" post="{{result}}" remove="false"> Tag post </paper-button>
-          </li>
+          <paper-card class="feedItem" heading="[[result.title]]">
+            <div class="card-content">
+              <h3> [[result.language]] </h3>
+              <h4> [[result.author]] </h4>
+            </div>
+            <div class="card-actions">
+              <paper-button raised on-tap="viewPost" post="{{result}}"> View Post </paper-button>
+              <paper-button raised on-tap="tagPost" post="{{result}}" remove="false"> Tag post </paper-button>
+            </div>
+          </paper-card>
         </template>
-      </ul>
     </div>
     <div id="draft-controls">
       <paper-button raised id="create" on-tap="create">Upload Post</paper-button>
@@ -59,18 +65,19 @@
     <h2> Created Posts </h2>
 
     <div id="posts">
-      <ul id="posts-list">
         <template is="dom-repeat" items="[[posts]]" as="post">
           <template is="dom-if" if="[[user.uid]] == [[post.uid]]">
-            <li>
-              <h3 class="postTitle"> [[post.title]] </h3>
-              <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
-              <p class="postContent"> [[post.content]] </p>
-              <paper-button raised on-tap="remove" post="[[post]]"> Delete Post </paper-button>
-            </li>
+            <paper-card class="feedItem"heading="[[post.title]]">
+              <div class="card-content">
+                <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
+                <p class="postContent"> [[post.content]] </p>
+              </div>
+              <div class="card-actions">
+                <paper-button raised on-tap="remove" post="[[post]]"> Delete Post </paper-button>
+              </div>
+            </paper-card>
           </template>
         </template>
-      </ul>
     </div>
 
 

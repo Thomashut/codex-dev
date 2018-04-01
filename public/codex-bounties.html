@@ -1,5 +1,11 @@
 <dom-module id="codex-bounties">
   <template>
+    <style>
+      .feedItem {
+        margin: 8px;
+        width: 80%;
+      }
+    </style>
     <h1> Bounties</h1>
 
     <firebase-auth
@@ -20,10 +26,10 @@
     </firebase-query>
 
     <div id="bounties_board">
-      <ul id="bounty_list">
         <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties">
-          <li class="bounty_item">
-            <h3> [[bounty.title]] - Rank: [[bounty.rank]] </h3>
+          <paper-card heading="[[bounty.title]]" class="feedItem">
+            <div class="card-content">
+            <h3> Rank: [[bounty.rank]] </h3>
             <h4> [[bounty.language]] </h4>
             <p> <i> Requested by: </i> [[bounty.poster]] </p>
             <h4> Description: </h4>
@@ -38,13 +44,15 @@
                 </paper-button>
               </p>
             </div>
+            </div>
+            <div class="card-actions">
             <template is="dom-if" if="[[user.uid]] == [[bounty.posterUID]]">
               <paper-button raised class="markButton" on-tap="markAsComplete"
                 bounty="[[bounty]]"> Mark as Complete </paper-button>
             </template>
-          </li>
+          </paper-item>
+          </div>
         </template>
-      </ul>
     </div>
 
 
