@@ -33,7 +33,7 @@
         features and give your opinion on the features themseleves and how they perform.
       </p>
 
-      <h2> News </h2>
+      <template is="dom-if" if="[[!user]]"> <h2> News </h2> </template>
 
       <template is="dom-repeat" items="{{news}}" as="item">
         <paper-card heading="[[item.header]]">
