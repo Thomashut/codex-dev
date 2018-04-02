@@ -1,3 +1,11 @@
+<!--
+  Color Scheme
+    Primary: #FFE71B
+    Secondary: #E87E0C
+    Highlight 1: #FF0000
+    Highlight 2: #8B0CE8
+    Highlight 3: #0D68FF
+-->
 <head> <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet"> </head>
 
 <!-- Bower_components import -->
@@ -57,16 +65,19 @@
 
     <style>
       body {
-      font-family: 'Cabin', sans-serif;
-      margin: 0px;
-      height: 100%;
-      width: 100%;
+        font-family: 'Cabin', sans-serif;
+        margin: 0px;
+        height: 100%;
+        width: 100%;
       }
       app-header {
+        font-family: 'Cabin', sans-serif;
         background-color: #00897B;
+        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
         color: #fff;
         margin: 0px;
-        width: 105%;
+        width: 100%;
+        text-shadow: 2px 0px black;
       }
       paper-icon-button {
         --paper-icon-button-ink-color: white;
@@ -75,13 +86,18 @@
         display: none;
       }
       #nav-head {
+        font-family: 'Cabin', sans-serif;
         background-color: #00897B;
+        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
         color: #fff;
+        text-shadow: 2px 0px black;
       }
       iron-selector paper-button {
+        font-family: 'Cabin', sans-serif;
         display: list-item;
         text-align: left;
         background-color: indigo;
+        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
         margin-top: 5%;
         width: 85%;
         color: #fff;
@@ -91,9 +107,40 @@
         width: 105%;
       }
       codex-login {
+        font-family: 'Cabin', sans-serif;
         margin-top: 10%;
         text-align: center;
         display: list-item;
+      }
+      template {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-home {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-bounties {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-feed {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-home {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-posts {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-profile {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-search {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-view {
+        font-family: 'Cabin', sans-serif;
+      }
+      codex-saved {
+        font-family: 'Cabin', sans-serif;
       }
     </style>
 
@@ -122,7 +169,7 @@
 
       <app-header-layout>
 
-        <app-header slot="header" reveals effects="waterfall">
+        <app-header slot="header" reveals effects="waterfall" fixed>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Codex</div>
