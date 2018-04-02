@@ -1,7 +1,46 @@
 <dom-module id="codex-home">
+  <firebase-auth
+    user="{{user}}">
+  </firebase-auth>
+
+  <firebase-query
+    id="newsFeed"
+    path="/news"
+    data="{{news}}">
+  </firebase-query>
+
   <template>
-    <h1> Hi Friend! This is the home page! </h1>
-    <p> nothing much here at the moment though, sorry :)  Transfer test</p>
+    <template is="dom-if" if="[[user]]">
+      <h2> Welcome [[user.displayName]]! To the Codex Public Test </h2>
+    </template>
+
+    <template is="dom-if" if="![[user]]">
+      <h2> Welcome To the Codex Public Test! </h2>
+    </template>
+    <p> This is the public test of the new Syntax and Semantic Learning Platform Codex</p>
+    <p> Codex hopes to be a new tool available to developers to help them to learn new programming languages
+        and to also help improve their knowledge of lanauges they may already develop in. </p>
+    <br/>
+
+    <p> <i> !Notice! </i> this is a test to determine the effectiveness of the site's features.
+        It would be greatly appreciated if you could fill out the following survey with a focus on the
+        <b> functionality </b> of the site rather than it's usability. This site is a prototype of what is
+        to follow so development has been focused on it's features over it's usability. That means that any
+        bugs in the interface or generally poor user experiences should be ignored if possible. There is a
+        section within the survey to report any such bugs but it would be appreciated if you could try all the
+        features and give your opinion on the features themseleves and how they perform.
+      </p>
+
+      <h2> News </h2>
+
+      <template is="dom-repeat" items="news" as="item">
+        <paper-card heading="[[item.header]]">
+          <div class="card-content">
+            <h3> Posted: [[item.posted]] </h3>
+            <p> [[item.content]] </p>
+          </div>
+        </paper-card>
+      </template>
 
   </template>
 
@@ -12,6 +51,18 @@
 
     class codex_home extends Polymer.Element {
       static get is() {return 'codex-home';}
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            notify: true
+          },
+          news: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
     }
 
     customElements.define(codex_home.is,codex_home);
