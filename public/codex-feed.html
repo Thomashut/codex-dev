@@ -1,5 +1,12 @@
 <dom-module id="codex-feed">
   <template>
+    <style>
+      .feedItem {
+        padding: 8px;
+        margin: 10px;
+        width: 80%;
+      }
+    </style>
     <firebase-auth user="{{user}}"></firebase-auth>
 
     <!-- Only Ever Pull 50 records - Stop massive load spikes -->
@@ -16,10 +23,9 @@
     </firebase-query>
 
     <div class="post_feed">
-      <ul id="post_list">
         <template id="post_repeat" is="dom-repeat" items="[[posts]]" as="post">
-          <li>
-            <h3 class="post_title"> [[post.title]] </h3>
+            <paper-card class="feedItem" heading="[[post.title]]">
+            <div class="card-content">
             <h4 class="post_language"> [[post.language]] </h4>
             <p class="post_content"> [[post.content]] </p>
             <h4 class="rankings_header"> Rankings: </h4>
@@ -44,14 +50,17 @@
                   <iron-icon icon="vaadin:plus"> </iron-icon>
                 </paper-button>
               </li>
+              </div>
+              <div class="card-actions">
               <paper-button raised class="viewPostButton" on-tap="viewPost" post="[[post]]">View Post</paper-button>
+              </div>
             </ul>
-          </li>
+            <br/>
+        </paper-card>
         </template>
 
         <!-- Displays fallback text if no posts are present -->
         <div id="no_posts"></div>
-      </ul>
     </div>
 
   </template>

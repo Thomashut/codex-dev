@@ -1,5 +1,11 @@
 <dom-module id="codex-search">
   <template>
+    <style>
+      .feedItem {
+        margin: 8px;
+        width: 80%;
+      }
+    </style>
     <h1> Search </h1>
 
     <firebase-auth
@@ -27,16 +33,17 @@
 
 
     <div id="searchResults">
-      <ul id="resultsList">
         <template id="searchRepeat" is="dom-repeat" items="{{results}}" as="result" filter="_search" sort="_sort">
-          <li class="searchItem">
-            <h3> [[result.title]] </h3>
+          <paper-card heading="[[result.title]]" class="feedItem">
+            <div class="card-content">
             <h3> [[result.language]] </h3>
             <p> [[result.content]] </p>
-            <paper-button raised class="viewPostButton" on-tap="viewPost" post="[[result]]"> View Post </paper-button>
-          </li>
+            </div>
+            <div class="card-actions">
+              <paper-button raised class="viewPostButton" on-tap="viewPost" post="[[result]]"> View Post </paper-button>
+            </div>
+          </paper-card>
         </template>
-      </ul>
     </div>
 
   </template>

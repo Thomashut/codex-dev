@@ -17,7 +17,7 @@
 
     <template is="dom-if" if="[[user]]">
       <h1> Hi [[user.displayName]] </h1>
-      <img class="profile_image"src="[[user.photoURL]]" alt="Your Profile image"/>
+      <paper-avatar src="[[user.photoURL]]"></paper-avatar> <br/>
 
       <paper-button raised class="view" on-tap="viewPosts"> View Your Posts </paper-button>
     </template>

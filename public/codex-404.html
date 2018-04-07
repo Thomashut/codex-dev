@@ -1,17 +1,23 @@
 <dom-module id="codex-404">
   <template>
-    <h1> 404 </h1>
 
-    <p> Page not found. </p>
+    <paper-spinner active alt="Checking for Errors"></paper-spinner>
+
+    <div id="fallThrough">
+      <h1> 404 </h1>
+      <p> Page not found. </p>
+    </div>
+
   </template>
 
   <script>
-    // Polymer({
-    //   is: 'codex_404',
-    // });
-
     class codex_404 extends Polymer.Element {
       static get is() {return 'codex-404';};
+
+      ready() {
+        super.ready();
+        this.$.fallThrough.style.display = "none";
+      }
 
     }
 

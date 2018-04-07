@@ -1,4 +1,11 @@
 <dom-module id="codex-view">
+  <style>
+    .feedItem {
+      margin: 10px;
+      width: 80%;
+      }
+    }
+  </style>
   <template>
   <firebase-auth
     user="{{user}}">
@@ -27,34 +34,40 @@
       <paper-button raised on-tap="previous" post="[[post]]"> Return to the Previous Post </paper-button>
     </template>
 
-    <ul>
-      <li> [[post.title]] </li>
-      <li> [[post.language]] </li>
-      <li> [[post.author]] </li>
-      <li> [[post.content]] </li>
+    <paper-card heading="[[post.title]]" class="feedItem">
+      <div class="card-content">
+      <h3> [[post.language]] </h3>
+      <h3> By: [[post.author]] </h3>
+      <p> [[post.content]] </p>
 
       <br/>
 
-      <li> [[post.conRank]] </li>
-      <li> [[post.explainRank]] </li>
-      <li> [[post.linkRank]] </li>
-      <li> [[post.rank]] </li>
-      <li> <paper-button id="saveButton" raised on-tap="savePost" post="[[post]]"
+      <p> Conciseness: [[post.conRank]] </p>
+      <p> Explain Rank: [[post.explainRank]] </p>
+      <p> Well Linkedness: [[post.linkRank]] </p>
+      <p> General Rank: [[post.rank]] </p>
+      </div>
+      <div class="card-actions">
+      <p> <paper-button id="saveButton" raised on-tap="savePost" post="[[post]]"
               alreadySaved="false"> Save Post </paper-button>
-          </li>
-    </ul>
+          </p>
+      </div>
+    <paper-card>
   </template>
 
   <h4> Tagged Posts </h4>
   <paper-button raised on-tap="refreshTags"> Load Tagged Posts </paper-button>
-  <ul>
     <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter" observe="post">
-        <li> [[tag.title]] </li>
-        <li> [[tag.language]] </li>
-        <li> [[tag.author]] </li>
-        <paper-button raised on-tap="viewTag" tag="[[tag]]"> View Tag </paper-button>
+        <paper-card heading="[[tag.title]]" class="feedItem">
+        <div class="card-content">
+          <li> [[tag.language]] </li>
+          <li> [[tag.author]] </li>
+        </div>
+        <div class="card-actions">
+          <paper-button raised on-tap="viewTag" tag="[[tag]]"> View Tag </paper-button>
+        </div>
+        </paper-card>
     </template>
-  </ul>
 
   <h4> Discussion Section </h4>
   <div id="postComment">
@@ -63,14 +76,14 @@
   </div>
 
 
-  <paper-button raised on-tap="refreshComments"> Load Comments </paper-button>
-  <ul>
+  <paper-button raised on-tap="refreshComments"> Load Comments </paper-button> <br/> <br/>
     <template id="commentRepeat" is="dom-repeat" items="{{comments}}" as="comment">
-      <li> <img src="[[comment.authorURL]]" alt="User Image"/>
-      <li> [[comment.author]] </li>
-      <li> [[comment.body]] </li>
+      <paper-card header="[[comment.author]]" class="feedItem">
+        <paper-avatar src="[[comment.authorURL]]"></paper-avatar>
+        <p> [[comment.author]] </p>
+        <p> [[comment.body]] </p>
+    </paper-card>
     </template>
-  </ul>
 
   </template>
   <script>

@@ -1,5 +1,11 @@
 <dom-module id="codex-saved">
   <template>
+    <style>
+      .feedItem {
+        margin: 8px;
+        width: 80%;
+      }
+    </style>
     <firebase-auth
       user="{{user}}">
     </firebase-auth>
@@ -16,17 +22,18 @@
     </template>
 
 
-    <ul id="savedList">
       <template is="dom-repeat" items="[[saved]]" as="post">
-        <li>
-          <h3> [[post.title]] </h3>
+        <paper-card heading="[[post.title]]" class="feedItem">
+          <div class="card-content">
           <h4> [[post.language]] </h4>
           <h4> Author: [[post.author]] </h4>
           <p> [[post.content]] </p>
+        </div>
+        <div class="card-actions">
           <paper-button raised on-tap="deletePost" post="[[post]]"> Delete </paper-button>
-        </li>
+        </div>
+        </paper-card>
       </template>
-    </ul>
 
     <paper-button raised on-tap="ready"> Reload Saved </paper-button>
   </template>
