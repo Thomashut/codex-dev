@@ -173,13 +173,13 @@
 
       // Helper function for the dom-repeat so it can sort bounties by their rank
       _sortBounties(a, b) {
-        var a = parseInt(a);
-        var b = parseInt(b);
+        var a = parseInt(a.rank);
+        var b = parseInt(b.rank);
 
         if(a == b)
           return 0;
         else {
-          return  a < b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
+          return  a > b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
         }
       }
 
