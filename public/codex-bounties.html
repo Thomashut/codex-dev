@@ -91,6 +91,12 @@
         var bountyPoster = this.user.displayName;
         var bountyContent = this.$.bountyBody.value;
 
+        if(bountyTitle == null || bountyLanguage == null ||
+            bountyContent == null) {
+              console.log("Need Propper Errors - Missing Content, please fill out fields");
+              return -1;
+            }
+
         // Push new bounty to the database as a JSON object
         this.$.query.ref.push({
           title: bountyTitle,
@@ -102,9 +108,9 @@
         });
 
         // Empty input fields
-        this.$.bountyTitle.value = "";
-        this.$.bountyLanguage.value = "";
-        this.$.bountyBody.value = "";
+        this.$.bountyTitle.value = null;
+        this.$.bountyLanguage.value = null;
+        this.$.bountyBody.value = null;
       }
 
       upVote(e) {
