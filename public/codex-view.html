@@ -186,7 +186,7 @@
       }
 
       saveComment(e) {
-        if(!this.$.commentBody || !this.post) {
+        if(this.$.commentBody == null || !this.post) {
           console.log("Need Proper Errors - No Comment to post or post to comment on");
           return -1;
         }
