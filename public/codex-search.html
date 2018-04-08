@@ -115,25 +115,25 @@
           case 0: // No specific sort
             return 0;
           case 1: // Sort on Consiceness rank
-            if(a.conRank == b.conRank)
+            if(parseInt(a.conRank) == parseInt(b.conRank))
               return 0;
             else
-              return parseInt(a.conRank) < parseInt(b.conRank) ? -1 : 1;
+              return parseInt(a.conRank) > parseInt(b.conRank) ? -1 : 1;
           case 2: // Sort on explain rank
-            if(a.explainRank ==  b.explainRank)
+            if(parseInt(a.explainRank) ==  parseInt(b.explainRank))
               return 0;
             else
-              return parseInt(a.explainRank) < parseInt(b.explainRank) ? -1 : 1;
+              return parseInt(a.explainRank) > parseInt(b.explainRank) ? -1 : 1;
           case 3: // Sort on Link Rank
-            if(a.linkRank == b.linkRan)
+            if(parseInt(a.linkRank) == parseInt(b.linkRank))
               return 0;
             else
-              return  parseInt(a.linkRank) < parseInt(b.linkRank) ? -1 : 1;
+              return  parseInt(a.linkRank) > parseInt(b.linkRank) ? -1 : 1;
           case 4: // Sort on General Rank
-            if(a.rank == b.rank)
+            if(parseInt(a.rank) == parseInt(b.rank))
               return 0;
             else
-              return  parseInt(a.rank) < parseInt(b.rank) ? -1 : 1;
+              return  parseInt(a.rank) > parseInt(b.rank) ? -1 : 1;
           default: // Drop down menu is broken so do no specific sort
             return 0;
         }
