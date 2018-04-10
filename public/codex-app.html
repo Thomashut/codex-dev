@@ -154,13 +154,18 @@
           role="navigation" fallback-selection="404">
             <paper-button raised class="indigo" name="home"> <iron-icon icon="vaadin:home"> </iron-icon> Home </paper-button>
             <paper-button raised class="indigo" name="search"> <iron-icon icon="vaadin:search"> </iron-icon> Search </paper-button>
-            <paper-button raised class="indigo" name="bounties"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
+            <paper-button raised class="indigo" name="bounties" hidden$="[[!user]]"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
             <paper-button raised class="indigo" name="feed" hidden$="[[!user]]"> <iron-icon icon="vaadin:list-select"> </iron-icon> Your Feed </paper-button>
 
             <paper-button raised class="indigo" name="profile" hidden$="[[!user]]"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
             <paper-button raised class="indigo" name="posts" hidden$="[[!user]]"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
             <paper-button raised class="indigo" name="saved" hidden$="[[!user]]"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
-            <paper-button raised class="indigo" name="view" hidden$="[[!post]]"> <iron-icon icon="vaadin:plus"> </iron-icon> View Post </paper-button>
+            <paper-button raised class="indigo" name="view" hidden$="[[!post]]"> <iron-icon icon="vaadin:file-text"> </iron-icon> View Post </paper-button>
+
+            <a href="https://drive.google.com/file/d/14yYQ71lqH6TvN6L_oaQeyQbK8GEo7-nS/view?usp=sharing"
+              style="text-decoration: none;" target="_blank">
+              <paper-button raised class="indigo"> <iron-icon icon="vaadin:info-circle"></iron-icon> Help </paper-button>
+            </a>
 
             <codex-login user="{{user}}" page="{{page}}"> </codex-login>
           </div>
