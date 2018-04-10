@@ -25,13 +25,30 @@
       data="{{check}}">
     </firebase-query>
 
-    <div id="bounties_board">
-        <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties">
+    <div id="your_bounties_board">
+        <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties" filter="_yourBounties">
           <paper-card heading="[[bounty.title]]" class="feedItem">
             <div class="card-content">
             <h3> Rank: [[bounty.rank]] </h3>
             <h4> [[bounty.language]] </h4>
-            <p> <i> Requested by: </i> [[bounty.poster]] </p>
+            <h4> Description: </h4>
+            <p> [[bounty.content]] </p>
+            </div>
+            <div class="card-actions">
+              <paper-button raised class="markButton" on-tap="markAsComplete"
+                bounty="[[bounty]]"> Mark as Complete </paper-button>
+          </paper-item>
+          </div>
+        </template>
+    </div>
+
+    <div id="other_bounties_board">
+      <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties" filter="_otherBounties">
+        <paper-card heading="[[bounty.title]]" class="feedItem">
+          <div class="card-content">
+            <h3> Rank [[bounty.rank]] </h3>
+            <h4> [[bounty.language]] </h4>
+            <p> <i> requested by: </i> [[bounty.poster]] </p>
             <h4> Description: </h4>
             <p> [[bounty.content]] </p>
             <div id="voting_controls" hidden$="[[!user]]">
@@ -44,15 +61,9 @@
                 </paper-button>
               </p>
             </div>
-            </div>
-            <div class="card-actions">
-            <template is="dom-if" if="[[user.uid]] == [[bounty.posterUID]]">
-              <paper-button raised class="markButton" on-tap="markAsComplete"
-                bounty="[[bounty]]"> Mark as Complete </paper-button>
-            </template>
-          </paper-item>
           </div>
-        </template>
+        </paper-card>
+      </template>
     </div>
 
 
@@ -83,6 +94,24 @@
             type: Object
           }
         };
+      }
+
+      _yourBounties(result) {
+        if(!result) return false;
+        if(!this.user) return false;
+
+        if(!result.posterUID || !this.user.uid) return false;
+
+        return this.user.uid === result.posterUID;
+      }
+
+      _otherBounties(result) {
+        if(!result) return false;
+        if(!this.user) return false;
+
+        if(!result.posterUID || !this.user.uid) return false;
+
+        return !(this.user.uid === result.posterUID);
       }
 
       submit() {
