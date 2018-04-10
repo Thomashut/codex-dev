@@ -43,7 +43,7 @@
       <div id="searchControls">
         <paper-input id="searchTitle" label="Enter Author or Title Here"> </paper-input>
         <paper-input id="searchLanguage" label="Enter Desired Language Here"> </paper-input>
-        <paper-button id="commitSearch" on-tap="search"> Search </paper-button>
+        <paper-button raised id="commitSearch" on-tap="search"> Search </paper-button>
       </div>
         <template id="searchRepeat" is="dom-repeat" items="{{searchResults}}" as="result" filter="_filterPosts">
           <paper-card class="feedItem" heading="[[result.title]]">
@@ -156,6 +156,7 @@
 
     _filterCreated(result) {
       if(!result) return false;
+      if(!this.user) return false;
 
       if(!result.uid) return false;
 
