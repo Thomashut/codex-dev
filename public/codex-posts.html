@@ -65,9 +65,8 @@
     <h2> Created Posts </h2>
 
     <div id="posts">
-        <template is="dom-repeat" items="[[posts]]" as="post">
-          <template is="dom-if" if="[[user.uid]] == [[post.uid]]">
-            <paper-card class="feedItem"heading="[[post.title]]">
+        <template is="dom-repeat" items="[[posts]]" as="post" filter="_filterCreated">
+            <paper-card class="feedItem" heading="[[post.title]]">
               <div class="card-content">
                 <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
                 <p class="postContent"> [[post.content]] </p>
@@ -76,7 +75,6 @@
                 <paper-button raised on-tap="remove" post="[[post]]"> Delete Post </paper-button>
               </div>
             </paper-card>
-          </template>
         </template>
     </div>
 
@@ -154,6 +152,14 @@
         for(var i = 0; i < this.$.taggedPosts.childNodes; i++) { // Remove all tagged posts
           this.$.taggedPosts.removeChild(this.$.taggedPosts.childNodes[i]);
         }
+    }
+
+    _filterCreated(result) {
+      if(!result) return false;
+
+      if(!result.uid) return false;
+
+      return result.uid === this.user.uid;
     }
 
     // e = event, Will delete a user's post
