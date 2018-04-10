@@ -1,6 +1,14 @@
 <dom-module id="codex-home">
-
   <template>
+    <style>
+      .newsItem {
+        margin-bottom: 15px;
+      }
+
+    </style>
+
+
+
     <firebase-auth
       user="{{user}}">
     </firebase-auth>
@@ -22,21 +30,26 @@
     <p> This is the public test of the new Syntax and Semantic Learning Platform Codex</p>
     <p> Codex hopes to be a new tool available to developers to help them to learn new programming languages
         and to also help improve their knowledge of lanauges they may already develop in. </p>
+
+    <p> The tool itself places an increase focus on learning the semantics and syntax of a programming langauge
+        over just learning the sollution to a specific problem. The attributes attached to every post are an
+        example of this. </p>
     <br/>
 
     <p> <b><i> !Notice! </i></b> this is a test to determine the effectiveness of the site's features.
         It would be greatly appreciated if you could fill out the following survey with a focus on the
-        <b> functionality </b> of the site rather than it's usability. This site is a prototype of what is
-        to follow so development has been focused on it's features over it's usability. That means that any
-        bugs in the interface or generally poor user experiences should be ignored if possible. There is a
+        <b> functionality </b> of the site rather than it's usability.
+        <br/>
+        This site is a prototype of what is to follow so development has been focused on it's features over it's usability.
+        That means that any bugs in the interface or generally poor user experiences should be ignored if possible. There is a
         section within the survey to report any such bugs but it would be appreciated if you could try all the
         features and give your opinion on the features themseleves and how they perform.
       </p>
 
-      <template is="dom-if" if="[[!user]]"> <h2> News </h2> </template>
+      <h2> News </h2>
 
       <template is="dom-repeat" items="{{news}}" as="item">
-        <paper-card heading="[[item.header]]">
+        <paper-card heading="[[item.header]]" class="newsItem">
           <div class="card-content">
             <h3> Posted: [[item.posted]] </h3>
             <p> [[item.content]] </p>
