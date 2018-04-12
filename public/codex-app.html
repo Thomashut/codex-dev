@@ -77,7 +77,6 @@
         background: linear-gradient(-180deg,#FFE71B,#E87E0C);
         color: #fff;
         margin: 0px;
-        width: 100%;
         text-shadow: 2px 0px black;
       }
       paper-icon-button {
@@ -104,8 +103,12 @@
         color: #fff;
         text-shadow: 2px 0px black;
       }
+      #content {
+        padding: 5%
+      }
       #drawer {
-        width: 105%;
+        height: 100%;
+        overflow: auto;
       }
       codex-login {
         font-family: 'Cabin', sans-serif;
@@ -147,7 +150,7 @@
 
     <app-drawer-layout>
 
-      <app-drawer slot="drawer">
+      <app-drawer id="appDrawer" slot="drawer" swipeOpen="true">
         <div id="drawer">
         <app-toolbar id="nav-head">Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
@@ -216,7 +219,8 @@
             type: String,
             reflectToAttribute: true,
             value: "home",
-            notify: true
+            notify: true,
+            observer: "_pageChanged"
           },
           user: {
             type: Object,
@@ -239,6 +243,12 @@
             // e.currentTarget.select("home");
           }
         });
+      }
+
+      _pageChanged() {
+        if(!this.$.appDrawer) return -1;
+
+        this.$.appDrawer.opened = false;
       }
 
       openNav() {
