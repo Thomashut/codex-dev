@@ -1,3 +1,12 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : Index.html
+  Project       : Codex - Dissertation Project
+  Description   :
+  ` The index page hosts the codex-app element which is a combination of
+    all the other custom elements. The page also imports some of the key
+    dependancies such as Jquery and some of the web component requirements.
+-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,6 +31,7 @@
     <script src="./bower_components/webcomponentsjs/webcomponents-lite.js">
     </script>
 
+     <!-- Polyfire imports -->
     <link rel="import" href="bower_components/polymerfire/firebase-app.html">
     <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
     <link rel="import" href="bower_components/polymerfire/firebase-query.html">
@@ -32,6 +42,11 @@
       body {margin: 0;}
     </style>
 
+
+<!--
+    Web component that handles the construction of the connection to
+    firebase. This handles authentication and database mangament.
+-->
     <firebase-app
       id="firebase"
       app-name="codex"

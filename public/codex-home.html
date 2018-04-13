@@ -1,3 +1,13 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-home.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    User landing page when they first connect to the site. Gives general site
+    news too. Later a in site news form might be added but currently the only
+    way to create new news posts is to do it manually via the database
+-->
+
 <dom-module id="codex-home">
   <template>
     <style>
@@ -78,11 +88,12 @@
         }
       }
 
+      // Sort news feed items so that the higher the order the closer to the top of the feed the post is.
       _sortPosts(a,b) {
         if(!a || !b) return 0;
 
         if(!a.order || !b.order) return 0;
-        
+
         return  parseInt(a.order) > parseInt(b.order) ? -1 : 1;
       }
 

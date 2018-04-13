@@ -1,3 +1,12 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-login.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    This custom element produces a button on the page that will handle
+    logging in and logging out
+-->
+
 <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
@@ -37,10 +46,12 @@
         }
       }
 
+      // Sign in using Google's o-auth platform
       login() {
         this.$.auth.signInWithRedirect();
       }
 
+      // destroy current user session and refresh page to clean everything up
       logout() {
         this.$.auth.signOut();
         location.reload();

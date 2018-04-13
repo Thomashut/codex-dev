@@ -1,3 +1,12 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-bounties.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Allows uses to submit, vote and view requests made by other users for
+    specific content posts
+-->
+
 <dom-module id="codex-bounties">
   <template>
     <style>
@@ -96,6 +105,7 @@
         };
       }
 
+      // Create the first list of the bounties created by the user
       _yourBounties(result) {
         if(!result) return false;
         if(!this.user) return false;
@@ -105,6 +115,7 @@
         return this.user.uid === result.posterUID;
       }
 
+      // Creates a second list of bounties not created by the user
       _otherBounties(result) {
         if(!result) return false;
         if(!this.user) return false;
@@ -114,6 +125,7 @@
         return !(this.user.uid === result.posterUID);
       }
 
+      // sends a request to the database
       submit() {
         var bountyTitle = this.$.bountyTitle.value;
         var bountyLanguage = this.$.bountyLanguage.value;
@@ -142,6 +154,7 @@
         this.$.bountyBody.value = null;
       }
 
+      // Upvote a bounty
       upVote(e) {
         var bountyKey = e.currentTarget.bounty.$key;
         var userUID   = this.user.uid;
@@ -174,6 +187,7 @@
         }
       }
 
+      // Downn vote a bounty
       downVote(e) {
         var bountyKey = e.currentTarget.bounty.$key;
         var userUID   = this.user.uid;
@@ -218,6 +232,7 @@
         }
       }
 
+      // Deletes the bounty from the database
       markAsComplete(e) {
         if(e.currentTarget.bounty) {
           var bounty = e.currentTarget.bounty;

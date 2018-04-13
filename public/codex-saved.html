@@ -1,3 +1,12 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-saved.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Custome element to pull any posts stored in local storage and then load
+    them onto the page for the user to view
+-->
+
 <dom-module id="codex-saved">
   <template>
     <style>
@@ -54,6 +63,7 @@
         }
       }
 
+      // Called on page load
       ready() {
         super.ready();
         if(localStorage.getItem("savedPosts")) {
@@ -61,13 +71,12 @@
         }
       }
 
+      // Remove post from local storage
       deletePost(e) {
         var post = e.currentTarget.post;
         var index = this.saved.indexOf(post);
 
-        console.log(this.saved);
         this.saved.splice(index,1); // Remove item from the array
-        console.log(this.saved);
 
         localStorage.removeItem("savedPosts");
         localStorage.setItem("savedPosts",JSON.stringify(this.saved));

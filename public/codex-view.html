@@ -1,3 +1,14 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-view.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Custom component codex-view. This element handles the detailed viewing
+    of posts. The page cannot be accessed without the using press the view
+    post button on a post from the feed or the search menu. Here users can
+    view the post, vote on attributes and make comments.
+-->
+
 <dom-module id="codex-view">
   <template>
     <style>
@@ -116,6 +127,7 @@
         }
       }
 
+      // Called on page load, not page connection.
       ready() {
         super.ready();
         this.$.postView.render(); // Refresh the post template
@@ -123,18 +135,20 @@
           this.$.tagRepeat.render();
         }
         if(this.$.returnView) {
-          this.$.returnView.render();
+          this.$.returnView.render(); // Checks to see if user can return to a previous post if following tag list
         }
         if(this.$.commentRepeat && this.post) {
           this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
-          this.$.commentRepeat.render();
+          this.$.commentRepeat.render(); // Get the comments and re-render the comments section
         }
       }
 
+      // Returns the user to the homepage
       home() {
         this.$.page = "home";
       }
 
+      // Store a post in offline storage (save it to local storage)
       savePost(e) {
         var postToSave = e.currentTarget.post;
 
@@ -156,12 +170,12 @@
         }
       }
 
+      // Helper function called by DOM-repeat. Used to find tagged posts
       _filter(result) {
         if(!this.post) {return false;}
         if(!result) {return false;}
         var queryKey = result.$key;
         var postTags = JSON.parse(this.post.taggedPosts);
-        console.log("QK: " + queryKey + " PT " + postTags);
 
         if(postTags.length <= 0) {return false;} // No tags
         else {
@@ -171,6 +185,7 @@
         }
       }
 
+      // When user views a tag this function will load that tag and re-render view page
       viewTag(e) {
           var currentTag = e.currentTarget.tag;
           if(!currentTag) {
@@ -187,6 +202,7 @@
           this.page = "view";
       }
 
+      // Saves users comment to the current post
       saveComment(e) {
         if(this.$.commentBody == null || !this.post) {
           console.log("Need Proper Errors - No Comment to post or post to comment on");
@@ -213,6 +229,7 @@
 
       }
 
+      // Return to a previous post if a user viewed a tag
       previous(e) {
         var post = this.post;
         this.post = null;
@@ -223,12 +240,14 @@
         this.$.tagRepeat.render();
       }
 
+      // Re-load the tags, page needs a refresh to do this.
       refreshTags() {
         this.page = "home";
         this.ready();
         this.page = "view";
       }
 
+      // Re load any new comnments
       refreshComments() {
         this.ready();
       }

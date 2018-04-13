@@ -1,3 +1,13 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-feed.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Gives the user a general feed of all the posts currently on the site. In
+    the future this page might be user customisable by following specific creators
+    or liking specific languges to determine what appears on this feed.
+-->
+
 <dom-module id="codex-feed">
   <template>
     <style>
@@ -101,6 +111,13 @@
         }
       }
 
+      /*
+        This code can be vastly improved by condensing all of these functions
+        into two functions one for increasing the rank and one for decrasing the rank.
+        Instead this is a lot of redundant code that could be cleaned up.
+      */
+
+      // Increase the conciseness rank
       increaseCon(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-c"
@@ -138,6 +155,7 @@
         }
       }
 
+      // Decrease the conceiseness rank
       decreaseCon(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-c"
@@ -171,6 +189,7 @@
         }
       }
 
+      // Increase the explain rank
       increaseExplain(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-e"
@@ -208,6 +227,7 @@
         }
       }
 
+      // Decrease the explain rank
       decreaseExplain(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-e"
@@ -241,6 +261,7 @@
         }
       }
 
+      // Increase the well linked rank
       increaseLink(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-l"
@@ -278,6 +299,7 @@
         }
       }
 
+      // Decrease the well linked rank
       decreaseLink(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-l"
@@ -311,6 +333,7 @@
         }
       }
 
+      // Increase the general rank
       increaseRank(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-r"
@@ -348,6 +371,7 @@
         }
       }
 
+      // Decrease the general rank
       decreaseRank(e) {
         var key = e.currentTarget.post.$key;
         var localKey = key + "-r";
@@ -381,6 +405,7 @@
         }
       }
 
+      // Load the post onto the detailed post page and re-direct user there.
       viewPost(e) {
         if(e.currentTarget.post) {
           this.post = e.currentTarget.post;

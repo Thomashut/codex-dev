@@ -1,3 +1,11 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-posts.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Custom element to allow users to create, manage and delete their own posts
+-->
+
 <dom-module id="codex-posts">
   <template>
     <style>
@@ -105,6 +113,7 @@
         }
       }
 
+    // Called on page load
     ready() {
       super.ready();
       if(localStorage.getItem("taggedPosts")) {
@@ -112,7 +121,7 @@
       }
     }
 
-      // Creates post
+    // Creates post
     create() {
         // Check valid data
         if(this.$.draftTitle.value == null ||
@@ -154,6 +163,7 @@
         }
     }
 
+    // Filters the created posts list and removes any posts not made by the user
     _filterCreated(result) {
       if(!result) return false;
       if(!this.user) return false;
@@ -183,6 +193,7 @@
       }
     }
 
+    // User on the search for tag posts list. Will find posts for user to tag
     _filterPosts(result) {
       if(!result) return false; // Have no data to filter
 
@@ -217,6 +228,7 @@
       } else return false; // Something strange happened so throw false
     }
 
+    // Add a post as a tagged post to the current post under creation
     tagPost(e) {
       if(e.currentTarget.remove == "true") { // Remove the tag from the list
         e.currentTarget.remove = "false";

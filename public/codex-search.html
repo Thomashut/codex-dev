@@ -1,3 +1,12 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-search.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    This custom element handles the searching. When a user connects to the search
+    page they will use this page to find new content on the site.
+-->
+
 <dom-module id="codex-search">
   <template>
     <style>
@@ -144,7 +153,7 @@
         this.$.searchRepeat.render(); // Re-render the result list. Will re-run the filter function
       }
 
-      // to-do
+      // Load post onto the view post site and take the user to the view page
       viewPost(e) {
         if(e.currentTarget.post){
           this.post = e.currentTarget.post;
