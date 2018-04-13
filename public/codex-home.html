@@ -48,7 +48,7 @@
 
       <h2> News </h2>
 
-      <template is="dom-repeat" items="{{news}}" as="item">
+      <template is="dom-repeat" items="{{news}}" as="item" sort="_sortPosts">
         <paper-card heading="[[item.header]]" class="newsItem">
           <div class="card-content">
             <h3> Posted: [[item.posted]] </h3>
@@ -76,6 +76,14 @@
             notify: true
           }
         }
+      }
+
+      _sortPosts(a,b) {
+        if(!a || !b) return 0;
+
+        if(!a.order || !b.order) return 0;
+        
+        return  parseInt(a.order) > parseInt(b.order) ? -1 : 1;
       }
 
     }
