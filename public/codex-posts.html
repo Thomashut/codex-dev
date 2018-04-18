@@ -137,12 +137,20 @@
           taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
         }
 
+        var authorName = "";
+
+        if(this.user.displayName == null || this.user.displayName == "") {
+          authorName = "Anon";
+        } else {
+          authorName = this.user.displayName;
+        }
+
         taggedPosts = JSON.stringify(taggedPosts); // Prep posts for storage
 
         // Create JSON object and push to database - initialize all ranks to 0
         this.$.query.ref.push({
           uid: this.user.uid,
-          author: this.user.displayName,
+          author: authorName,
           title: this.$.draftTitle.value,
           language: this.$.draftLanguage.value,
           content: this.$.draftContent.value,

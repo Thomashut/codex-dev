@@ -11,6 +11,7 @@
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
 <dom-module id="codex-login">
+
   <template>
     <firebase-auth
       id="auth"
@@ -19,7 +20,8 @@
       provider="google">
     </firebase-auth>
 
-    <paper-button raised on-tap="login" hidden$="[[user]]"> Sign In </paper-button>
+    <paper-button raised on-tap="login" hidden$="[[user]]"> <iron-icon icon="vaadin:user-check"></iron-icon>  Sign In  </paper-button> <br/>
+    <paper-button raised on-tap="strangerLogin" hidden$="[[user]]"> <iron-icon icon="vaadin:bug-o"></iron-icon>  Sign in  </paper-button>
     <paper-button raised on-tap="logout" hidden$="[[!user]]"> Sign Out </paper-button>
 
 
@@ -49,6 +51,11 @@
       // Sign in using Google's o-auth platform
       login() {
         this.$.auth.signInWithRedirect();
+      }
+
+      // Sign in anonymously function
+      strangerLogin() {
+        this.$.auth.signInAnonymously();
       }
 
       // destroy current user session and refresh page to clean everything up
