@@ -129,8 +129,14 @@
       submit() {
         var bountyTitle = this.$.bountyTitle.value;
         var bountyLanguage = this.$.bountyLanguage.value;
-        var bountyPoster = this.user.displayName;
+        var bountyPoster = "";
         var bountyContent = this.$.bountyBody.value;
+
+        if(this.user.displayName == "" || this.user.displayName == null) {
+          bountyPoster = "Anon";
+        } else {
+          bountyPoster = this.user.displayName;
+        }
 
         if(bountyTitle == null || bountyLanguage == null ||
             bountyContent == null) {
