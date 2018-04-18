@@ -209,6 +209,14 @@
           return -1;
         }
 
+        var authorName = "";
+
+        if(this.user.displayName == "" || this.user.displayName == null) {
+          authorName = "Anon";
+        } else {
+          authorName = this.user.displayName;
+        }
+
         var commentBobdy = this.$.commentBody.value;
         var key = this.post.$key;
 
@@ -222,7 +230,7 @@
         this.$.commentQuery.ref.push({
           authorURL: photoURL,
           body: this.$.commentBody.value,
-          author: this.user.displayName
+          author: authorName
         }); // Push the comment to the database
 
         this.$.commentBody.value = "";
