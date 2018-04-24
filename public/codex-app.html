@@ -72,95 +72,16 @@
 <link rel="import" href="codex-view.html">
 <!-- End of Custom Components Import -->
 
+<!-- Style Import -->
+
+
 <dom-module id="codex-app">
   <template>
     <head>
       <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-appStyle.css">
     </head>
 
-    <style>
-      body {
-        font-family: 'Cabin', sans-serif;
-        margin: 0px;
-        height: 100%;
-        width: 100%;
-      }
-      app-header {
-        font-family: 'Cabin', sans-serif;
-        background-color: #00897B;
-        background: linear-gradient(to bottom, #43c6ac, #f8ffae);
-        color: #fff;
-        margin: 0px;
-      }
-      paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-      app-drawer-layout:not([narrow]) [drawer-toggle] {
-        display: none;
-      }
-      #nav-head {
-        font-family: 'Cabin', sans-serif;
-        background-color: #00897B;
-        background: linear-gradient(to bottom, #43c6ac, #f8ffae);
-        color: black;
-      }
-      iron-selector paper-button {
-        font-family: 'Cabin', sans-serif;
-        display: list-item;
-        text-align: left;
-        background-color: indigo;
-        background: linear-gradient(to bottom, #43c6ac, #f8ffae);
-        margin-top: 5%;
-        width: 85%;
-        color: black;
-      }
-      #content {
-        padding: 5px;
-      }
-      #drawer {
-        height: 100%;
-        overflow: auto;
-      }
-      app-toolbar {
-        color: black;
-      }
-      codex-login {
-        font-family: 'Cabin', sans-serif;
-        margin-top: 10%;
-        text-align: center;
-        display: list-item;
-      }
-      template {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-home {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-bounties {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-feed {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-home {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-posts {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-profile {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-search {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-view {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-saved {
-        font-family: 'Cabin', sans-serif;
-      }
-    </style>
 
     <app-drawer-layout>
 

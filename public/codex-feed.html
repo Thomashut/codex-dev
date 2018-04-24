@@ -10,13 +10,10 @@
 
 <dom-module id="codex-feed">
   <template>
-    <style>
-      .feedItem {
-        padding: 8px;
-        margin: 10px;
-        width: 80%;
-      }
-    </style>
+    <head>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-feedStyle.css">
+    </head>
+
     <firebase-auth user="{{user}}"></firebase-auth>
 
     <!-- Only Ever Pull 50 records - Stop massive load spikes -->
