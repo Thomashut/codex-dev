@@ -79,3 +79,6 @@ codex-view {
 codex-saved {
   font-family: 'Cabin', sans-serif;
 }
+::-webkit-scrollbar {
+  display: none;
+}
