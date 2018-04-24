@@ -45,7 +45,8 @@ app-toolbar {
 }
 codex-login {
   font-family: 'Cabin', sans-serif;
-  margin-top: 10%;
+  margin-top: 5%;
+  margin-bottom: 5%;
   text-align: center;
   display: list-item;
 }
