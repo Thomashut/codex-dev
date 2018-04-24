@@ -28,32 +28,25 @@
       <h2> Welcome [[user.displayName]]! To the Codex Public Test </h2>
     </template>
 
-    <template is="dom-if" if="[[!user]]">
+  <template is="dom-if" if="[[!user]]">
       <h2> Welcome To the Codex Public Test! </h2>
     </template>
 
-    <p> This is the public test of the new Syntax and Semantic Learning Platform Codex</p>
-    <p> Codex hopes to be a new tool available to developers to help them to learn new programming languages
-        and to also help improve their knowledge of languages they may already develop in. </p>
+  <p> This is the public test of the new Syntax and Semantic Learning Platform Codex</p>
+  <p> Codex hopes to be a new tool available to developers to help them to learn new programming languages and to also help improve their knowledge of languages they may already develop in. </p>
 
-    <p> The tool itself places an increase focus on learning the semantics and syntax of a programming language
-        over just learning the solution to a specific problem. The attributes attached to every post are an
-        example of this. </p>
-    <br/>
+  <p> The tool itself places an increase focus on learning the semantics and syntax of a programming language over just learning the solution to a specific problem. The attributes attached to every post are an example of this. </p>
+  <br/>
 
-    <p> <b><i> !Notice! </i></b> this is a test to determine the effectiveness of the site's features.
-        It would be greatly appreciated if you could fill out the following survey with a focus on the
-        <b> functionality </b> of the site rather than it's usability.
-        <br/>
-        This site is a prototype of what is to follow, so development has been focused on it's features over it's usability.
-        That means that any bugs in the interface or generally poor user experiences should be ignored if possible. There is a
-        section within the survey to report any such bugs, but it would be appreciated if you could try all the
-        features and give your opinion on the features themseleves and how they perform.
-      </p>
+  <p> <b><i> !Notice! </i></b> this is a test to determine the effectiveness of the site's features. It would be greatly appreciated if you could fill out the following survey with a focus on the
+    <b> functionality </b> of the site rather than it's usability.
+    <br/> This site is a prototype of what is to follow, so development has been focused on it's features over it's usability. That means that any bugs in the interface or generally poor user experiences should be ignored if possible. There is a section
+    within the survey to report any such bugs, but it would be appreciated if you could try all the features and give your opinion on the features themseleves and how they perform.
+  </p>
 
-      <h2> News </h2>
+  <h2> News </h2>
 
-      <template is="dom-repeat" items="{{news}}" as="item" sort="_sortPosts">
+  <template is="dom-repeat" items="{{news}}" as="item" sort="_sortPosts">
         <paper-card heading="[[item.header]]" class="newsItem">
           <div class="card-content">
             <h3> Posted: [[item.posted]] </h3>
@@ -65,10 +58,10 @@
   </template>
 
   <script>
-
-
     class codex_home extends Polymer.Element {
-      static get is() {return 'codex-home';}
+      static get is() {
+        return 'codex-home';
+      }
 
       static get properties() {
         return {
@@ -84,17 +77,17 @@
       }
 
       // Sort news feed items so that the higher the order the closer to the top of the feed the post is.
-      _sortPosts(a,b) {
-        if(!a || !b) return 0;
+      _sortPosts(a, b) {
+        if (!a || !b) return 0;
 
-        if(!a.order || !b.order) return 0;
+        if (!a.order || !b.order) return 0;
 
-        return  parseInt(a.order) > parseInt(b.order) ? -1 : 1;
+        return parseInt(a.order) > parseInt(b.order) ? -1 : 1;
       }
 
     }
 
-    customElements.define(codex_home.is,codex_home);
+    customElements.define(codex_home.is, codex_home);
   </script>
 
 </dom-module>

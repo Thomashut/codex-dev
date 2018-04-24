@@ -58,15 +58,15 @@
             </div>
           </paper-card>
         </template>
-    </div>
-    <div id="draft-controls">
-      <paper-button raised id="create" on-tap="create">Upload Post</paper-button>
-    </div>
+  </div>
+  <div id="draft-controls">
+    <paper-button raised id="create" on-tap="create">Upload Post</paper-button>
+  </div>
 
-    <h2> Created Posts </h2>
+  <h2> Created Posts </h2>
 
-    <div id="posts">
-        <template is="dom-repeat" items="[[posts]]" as="post" filter="_filterCreated">
+  <div id="posts">
+    <template is="dom-repeat" items="[[posts]]" as="post" filter="_filterCreated">
             <paper-card class="feedItem" heading="[[post.title]]">
               <div class="card-content">
                 <h4 class="postLanguage"> Langauge: [[post.language]] <h4>
@@ -77,14 +77,16 @@
               </div>
             </paper-card>
         </template>
-    </div>
+  </div>
 
 
   </template>
 
   <script>
     class codex_posts extends Polymer.Element {
-      static get is() {return 'codex-posts';}
+      static get is() {
+        return 'codex-posts';
+      }
 
       static get properties() {
         return {
@@ -106,33 +108,33 @@
         }
       }
 
-    // Called on page load
-    ready() {
-      super.ready();
-      if(localStorage.getItem("taggedPosts")) {
-        localStorage.removeItem("taggedPosts"); // Clean up if user closed application before submitting
+      // Called on page load
+      ready() {
+        super.ready();
+        if (localStorage.getItem("taggedPosts")) {
+          localStorage.removeItem("taggedPosts"); // Clean up if user closed application before submitting
+        }
       }
-    }
 
-    // Creates post
-    create() {
+      // Creates post
+      create() {
         // Check valid data
-        if(this.$.draftTitle.value == null ||
-            this.$.draftLanguage.value == null ||
-            this.$.draftContent.value == null){
+        if (this.$.draftTitle.value == null ||
+          this.$.draftLanguage.value == null ||
+          this.$.draftContent.value == null) {
 
-            console.log("Create propper error messages - Missing Fields");
-            return -1;
+          console.log("Create propper error messages - Missing Fields");
+          return -1;
         }
 
         var taggedPosts = new Array(); // If user has no tags then this will just be empty
-        if(localStorage.getItem("taggedPosts")) { // Get tagged posts
+        if (localStorage.getItem("taggedPosts")) { // Get tagged posts
           taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
         }
 
         var authorName = "";
 
-        if(this.user.displayName == null || this.user.displayName == "") {
+        if (this.user.displayName == null || this.user.displayName == "") {
           authorName = "Anon";
         } else {
           authorName = this.user.displayName;
@@ -159,141 +161,140 @@
         this.$.draftLanguage.value = null;
         this.$.draftContent.value = null;
         localStorage.removeItem('taggedPosts');
-        for(var i = 0; i < this.$.taggedPosts.childNodes; i++) { // Remove all tagged posts
+        for (var i = 0; i < this.$.taggedPosts.childNodes; i++) { // Remove all tagged posts
           this.$.taggedPosts.removeChild(this.$.taggedPosts.childNodes[i]);
         }
-    }
-
-    // Filters the created posts list and removes any posts not made by the user
-    _filterCreated(result) {
-      if(!result) return false;
-      if(!this.user) return false;
-
-      if(!result.uid) return false;
-
-      return result.uid === this.user.uid;
-    }
-
-    // e = event, Will delete a user's post
-    remove(e) {
-      var key = e.currentTarget.post.$key;
-      this.$.query.ref.child(key).remove();
-    }
-
-    // Re-renders the search dom template
-    search() {
-      this.$.searchRepeat.render();
-    }
-
-    viewPost(e) {
-      if(e.currentTarget.post){
-        this.post = e.currentTarget.post;
-        this.page = "view";
-      } else {
-        console.log("Error has occured, missing post")
-      }
-    }
-
-    // User on the search for tag posts list. Will find posts for user to tag
-    _filterPosts(result) {
-      if(!result) return false; // Have no data to filter
-
-      var searchTag = null;
-      var searchLanguage = null;
-
-      /* pre-compute these tags to save multiple computation later */
-      var resultTitle = result.title.toLowerCase();
-      var resultLanguage = result.language.toLowerCase();
-      var resultAuthor = result.author.toLowerCase();
-
-      if(this.$.searchTitle.value) {
-        searchTag = this.$.searchTitle.value.toLowerCase();
       }
 
-      if(this.$.searchLanguage.value) {
-        searchLanguage = this.$.searchLanguage.value.toLowerCase();
+      // Filters the created posts list and removes any posts not made by the user
+      _filterCreated(result) {
+        if (!result) return false;
+        if (!this.user) return false;
+
+        if (!result.uid) return false;
+
+        return result.uid === this.user.uid;
       }
 
-      if(!searchTag && !searchLanguage) return false; // No Search Entered
-      else if (searchTag && searchLanguage) { // Search on both the language and the tag
-        if((searchTag == resultTitle && searchLanguage == resultLanguage)
-                                     ||
-           (searchTag == resultAuthor && searchLanguage == resultLanguage)
-         ) return true;
-      } else if(searchTag && !searchLanguage) { // Search on just the tag
-        if(searchTag == resultTitle || searchTag == resultAuthor)
-          return true;
-      } else if(!searchTag && searchLanguage) { // Search on just the language
-        if(searchLanguage == resultLanguage)
-          return true;
-      } else return false; // Something strange happened so throw false
-    }
+      // e = event, Will delete a user's post
+      remove(e) {
+        var key = e.currentTarget.post.$key;
+        this.$.query.ref.child(key).remove();
+      }
 
-    // Add a post as a tagged post to the current post under creation
-    tagPost(e) {
-      if(e.currentTarget.remove == "true") { // Remove the tag from the list
-        e.currentTarget.remove = "false";
-        var taggedPosts = this.$.taggedPosts.childNodes;
-        for(var i = 0; i < taggedPosts.length; i++) {
-          if(taggedPosts[i].post) {
-            if(taggedPosts[i].post.$key == e.currentTarget.post.$key) {
-              var localTags = JSON.parse(localStorage.getItem("taggedPosts"));
-              this.$.taggedPosts.removeChild(taggedPosts[i]); // Remove tag from user-side list
-              for(var j = 0; j < localTags.length; j++) {
-                if(localTags[j] == e.currentTarget.post.$key) {
-                  localTags.splice(j,1);
-                  localStorage.setItem("taggedPosts",JSON.stringify(localTags));
+      // Re-renders the search dom template
+      search() {
+        this.$.searchRepeat.render();
+      }
+
+      viewPost(e) {
+        if (e.currentTarget.post) {
+          this.post = e.currentTarget.post;
+          this.page = "view";
+        } else {
+          console.log("Error has occured, missing post")
+        }
+      }
+
+      // User on the search for tag posts list. Will find posts for user to tag
+      _filterPosts(result) {
+        if (!result) return false; // Have no data to filter
+
+        var searchTag = null;
+        var searchLanguage = null;
+
+        /* pre-compute these tags to save multiple computation later */
+        var resultTitle = result.title.toLowerCase();
+        var resultLanguage = result.language.toLowerCase();
+        var resultAuthor = result.author.toLowerCase();
+
+        if (this.$.searchTitle.value) {
+          searchTag = this.$.searchTitle.value.toLowerCase();
+        }
+
+        if (this.$.searchLanguage.value) {
+          searchLanguage = this.$.searchLanguage.value.toLowerCase();
+        }
+
+        if (!searchTag && !searchLanguage) return false; // No Search Entered
+        else if (searchTag && searchLanguage) { // Search on both the language and the tag
+          if ((searchTag == resultTitle && searchLanguage == resultLanguage) ||
+            (searchTag == resultAuthor && searchLanguage == resultLanguage)
+          ) return true;
+        } else if (searchTag && !searchLanguage) { // Search on just the tag
+          if (searchTag == resultTitle || searchTag == resultAuthor)
+            return true;
+        } else if (!searchTag && searchLanguage) { // Search on just the language
+          if (searchLanguage == resultLanguage)
+            return true;
+        } else return false; // Something strange happened so throw false
+      }
+
+      // Add a post as a tagged post to the current post under creation
+      tagPost(e) {
+        if (e.currentTarget.remove == "true") { // Remove the tag from the list
+          e.currentTarget.remove = "false";
+          var taggedPosts = this.$.taggedPosts.childNodes;
+          for (var i = 0; i < taggedPosts.length; i++) {
+            if (taggedPosts[i].post) {
+              if (taggedPosts[i].post.$key == e.currentTarget.post.$key) {
+                var localTags = JSON.parse(localStorage.getItem("taggedPosts"));
+                this.$.taggedPosts.removeChild(taggedPosts[i]); // Remove tag from user-side list
+                for (var j = 0; j < localTags.length; j++) {
+                  if (localTags[j] == e.currentTarget.post.$key) {
+                    localTags.splice(j, 1);
+                    localStorage.setItem("taggedPosts", JSON.stringify(localTags));
+                  }
                 }
+                e.currentTarget.innerHTML = "Add Tag";
               }
-              e.currentTarget.innerHTML = "Add Tag";
+            }
+          }
+        } else {
+          if (localStorage.getItem("taggedPosts") && e.currentTarget.post) {
+            var taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
+            if (taggedPosts.indexOf(e.currentTarget.post.$key) == -1) {
+              taggedPosts.push(e.currentTarget.post.$key);
+              var newNode = document.createElement("paper-item");
+
+              newNode.post = e.currentTarget.post;
+              newNode.innerHTML = "<p>" + newNode.post.title + "</p>";
+
+              this.$.taggedPosts.appendChild(newNode);
+              e.currentTarget.remove = "true";
+              e.currentTarget.innerHTML = "Remove Tag";
+
+              localStorage.setItem("taggedPosts", JSON.stringify(taggedPosts));
+            } else {
+              console.log("Error - Post alredy tagged ");
+            }
+          } else {
+            var taggedPosts = new Array();
+            if (e.currentTarget.post) {
+              taggedPosts.push(e.currentTarget.post.$key);
+              var newNode = document.createElement("paper-item");
+
+              newNode.post = e.currentTarget.post
+              newNode.innerHTML = "<p>" + e.currentTarget.post.title + "</p>";
+
+              this.$.taggedPosts.appendChild(newNode);
+              e.currentTarget.remove = "true";
+              e.currentTarget.innerHTML = "Remove Tag";
+
+              localStorage.setItem("taggedPosts", JSON.stringify(taggedPosts));
             }
           }
         }
-      } else {
-        if(localStorage.getItem("taggedPosts") && e.currentTarget.post) {
-          var taggedPosts = JSON.parse(localStorage.getItem("taggedPosts"));
-          if(taggedPosts.indexOf(e.currentTarget.post.$key) == -1) {
-            taggedPosts.push(e.currentTarget.post.$key);
-            var newNode = document.createElement("paper-item");
-
-            newNode.post = e.currentTarget.post;
-            newNode.innerHTML = "<p>" + newNode.post.title + "</p>";
-
-            this.$.taggedPosts.appendChild(newNode);
-            e.currentTarget.remove = "true";
-            e.currentTarget.innerHTML = "Remove Tag";
-
-            localStorage.setItem("taggedPosts",JSON.stringify(taggedPosts));
-          } else {
-            console.log("Error - Post alredy tagged ");
-          }
-        } else {
-          var taggedPosts = new Array();
-          if(e.currentTarget.post) {
-            taggedPosts.push(e.currentTarget.post.$key);
-            var newNode = document.createElement("paper-item");
-
-            newNode.post = e.currentTarget.post
-            newNode.innerHTML = "<p>" + e.currentTarget.post.title + "</p>";
-
-            this.$.taggedPosts.appendChild(newNode);
-            e.currentTarget.remove = "true";
-            e.currentTarget.innerHTML = "Remove Tag";
-
-            localStorage.setItem("taggedPosts",JSON.stringify(taggedPosts));
-          }
-        }
       }
+
+
+
     }
 
 
 
-  }
 
-
-
-
-    customElements.define(codex_posts.is,codex_posts);
+    customElements.define(codex_posts.is, codex_posts);
   </script>
 
 </dom-module>

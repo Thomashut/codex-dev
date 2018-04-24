@@ -9,14 +9,15 @@
 -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Codex</title>
 
-    <link rel="import" href="codex-app.html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex</title>
 
-    <!-- update the version number as needed
+  <link rel="import" href="codex-app.html">
+
+  <!-- update the version number as needed
     <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
      include only the Firebase features as you need
     <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
@@ -26,38 +27,36 @@
      initialize the SDK after all desired features are loaded
     <script defer src="/__/firebase/init.js"></script> -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-    </script>
-    <script src="./bower_components/webcomponentsjs/webcomponents-lite.js">
-    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  <script src="./bower_components/webcomponentsjs/webcomponents-lite.js">
+  </script>
 
-     <!-- Polyfire imports -->
-    <link rel="import" href="bower_components/polymerfire/firebase-app.html">
-    <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
-    <link rel="import" href="bower_components/polymerfire/firebase-query.html">
-    <link rel="shortcut icon" href="./res/favicon.png" type="image/png">
-  </head>
-  <body>
-    <style>
-      body {margin: 0;}
-    </style>
+  <!-- Polyfire imports -->
+  <link rel="import" href="bower_components/polymerfire/firebase-app.html">
+  <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
+  <link rel="import" href="bower_components/polymerfire/firebase-query.html">
+  <link rel="shortcut icon" href="./res/favicon.png" type="image/png">
+</head>
+
+<body>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
 
 
-<!--
+  <!--
     Web component that handles the construction of the connection to
     firebase. This handles authentication and database mangament.
 -->
-    <firebase-app
-      id="firebase"
-      app-name="codex"
-      auth-domain="codex-8eb0b.firebaseapp.com"
-      database-url="https://codex-8eb0b.firebaseio.com"
-      api-key="AIzaSyC-RyIgmlV7J1LzllCud6KQbBj3gN-omR0"
-      storage-bucket="codex-8eb0b.appspot.com"
-      messaging-sender-id="790367278764">
-    </firebase-app>
+  <firebase-app id="firebase" app-name="codex" auth-domain="codex-8eb0b.firebaseapp.com" database-url="https://codex-8eb0b.firebaseio.com" api-key="AIzaSyC-RyIgmlV7J1LzllCud6KQbBj3gN-omR0" storage-bucket="codex-8eb0b.appspot.com" messaging-sender-id="790367278764">
+  </firebase-app>
 
 
-    <codex-app><codex-app>
-  </body>
+  <codex-app>
+    <codex-app>
+</body>
+
 </html>

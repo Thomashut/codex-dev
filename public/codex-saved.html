@@ -29,7 +29,7 @@
     </template>
 
 
-      <template is="dom-repeat" items="[[saved]]" as="post">
+  <template is="dom-repeat" items="[[saved]]" as="post">
         <paper-card heading="[[post.title]]" class="feedItem">
           <div class="card-content">
           <h4> [[post.language]] </h4>
@@ -42,12 +42,14 @@
         </paper-card>
       </template>
 
-    <paper-button raised on-tap="ready"> Reload Saved </paper-button>
+  <paper-button raised on-tap="ready"> Reload Saved </paper-button>
   </template>
 
   <script>
     class codex_saved extends Polymer.Element {
-      static get is() {return 'codex-saved';}
+      static get is() {
+        return 'codex-saved';
+      }
 
       static get properties() {
         return {
@@ -64,7 +66,7 @@
       // Called on page load
       ready() {
         super.ready();
-        if(localStorage.getItem("savedPosts")) {
+        if (localStorage.getItem("savedPosts")) {
           this.saved = JSON.parse(localStorage.getItem("savedPosts"));
         }
       }
@@ -74,16 +76,16 @@
         var post = e.currentTarget.post;
         var index = this.saved.indexOf(post);
 
-        this.saved.splice(index,1); // Remove item from the array
+        this.saved.splice(index, 1); // Remove item from the array
 
         localStorage.removeItem("savedPosts");
-        localStorage.setItem("savedPosts",JSON.stringify(this.saved));
+        localStorage.setItem("savedPosts", JSON.stringify(this.saved));
         this.ready(); // Reload the list
       }
 
     }
 
-    customElements.define(codex_saved.is,codex_saved);
+    customElements.define(codex_saved.is, codex_saved);
   </script>
 
 </dom-module>
