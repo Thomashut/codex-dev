@@ -1,11 +1,18 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-bounties.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Allows uses to submit, vote and view requests made by other users for
+    specific content posts
+-->
+
 <dom-module id="codex-bounties">
   <template>
-    <style>
-      .feedItem {
-        margin: 8px;
-        width: 80%;
-      }
-    </style>
+    <head>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-bountiesStyle.css">
+    </head>
+
     <h1> Bounties</h1>
 
     <firebase-auth
@@ -25,13 +32,30 @@
       data="{{check}}">
     </firebase-query>
 
-    <div id="bounties_board">
-        <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties">
+    <div id="your_bounties_board">
+        <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties" filter="_yourBounties">
           <paper-card heading="[[bounty.title]]" class="feedItem">
             <div class="card-content">
             <h3> Rank: [[bounty.rank]] </h3>
             <h4> [[bounty.language]] </h4>
-            <p> <i> Requested by: </i> [[bounty.poster]] </p>
+            <h4> Description: </h4>
+            <p> [[bounty.content]] </p>
+            </div>
+            <div class="card-actions">
+              <paper-button raised class="markButton" on-tap="markAsComplete"
+                bounty="[[bounty]]"> Mark as Complete </paper-button>
+          </paper-item>
+          </div>
+        </template>
+  </div>
+
+  <div id="other_bounties_board">
+    <template is="dom-repeat" items="{{bounties}}" as="bounty" sort="_sortBounties" filter="_otherBounties">
+        <paper-card heading="[[bounty.title]]" class="feedItem">
+          <div class="card-content">
+            <h3> Rank [[bounty.rank]] </h3>
+            <h4> [[bounty.language]] </h4>
+            <p> <i> requested by: </i> [[bounty.poster]] </p>
             <h4> Description: </h4>
             <p> [[bounty.content]] </p>
             <div id="voting_controls" hidden$="[[!user]]">
@@ -44,35 +68,30 @@
                 </paper-button>
               </p>
             </div>
-            </div>
-            <div class="card-actions">
-            <template is="dom-if" if="[[user.uid]] == [[bounty.posterUID]]">
-              <paper-button raised class="markButton" on-tap="markAsComplete"
-                bounty="[[bounty]]"> Mark as Complete </paper-button>
-            </template>
-          </paper-item>
           </div>
-        </template>
-    </div>
+        </paper-card>
+      </template>
+  </div>
 
 
-    <div id="makeARequest" hidden$="[[!user]]">
-      <h3> Make a Request </h3>
-      <paper-input id="bountyTitle" label="Enter a Post Title"></paper-input>
-      <paper-input id="bountyLanguage" label="Enter the Desired Language"></paper-input>
-      <paper-textarea id="bountyBody" label="Enter a Description of your Request"></paper-textarea>
-      <div id="requestControls">
-        <paper-button raised id="bountySubmit" on-tap="submit">Make a Request</paper-button>
-      </div>
+  <div id="makeARequest" hidden$="[[!user]]">
+    <h3> Make a Request </h3>
+    <paper-input id="bountyTitle" label="Enter a Post Title"></paper-input>
+    <paper-input id="bountyLanguage" label="Enter the Desired Language"></paper-input>
+    <paper-textarea id="bountyBody" label="Enter a Description of your Request"></paper-textarea>
+    <div id="requestControls">
+      <paper-button raised id="bountySubmit" on-tap="submit">Make a Request</paper-button>
     </div>
+  </div>
 
   </template>
 
   <script>
-
     class codex_bounties extends Polymer.Element {
 
-      static get is() {return 'codex-bounties';}
+      static get is() {
+        return 'codex-bounties';
+      }
 
       static get properties() {
         return {
@@ -85,11 +104,44 @@
         };
       }
 
+      // Create the first list of the bounties created by the user
+      _yourBounties(result) {
+        if (!result) return false;
+        if (!this.user) return false;
+
+        if (!result.posterUID || !this.user.uid) return false;
+
+        return this.user.uid === result.posterUID;
+      }
+
+      // Creates a second list of bounties not created by the user
+      _otherBounties(result) {
+        if (!result) return false;
+        if (!this.user) return false;
+
+        if (!result.posterUID || !this.user.uid) return false;
+
+        return !(this.user.uid === result.posterUID);
+      }
+
+      // sends a request to the database
       submit() {
         var bountyTitle = this.$.bountyTitle.value;
         var bountyLanguage = this.$.bountyLanguage.value;
-        var bountyPoster = this.user.displayName;
+        var bountyPoster = "";
         var bountyContent = this.$.bountyBody.value;
+
+        if (this.user.displayName == "" || this.user.displayName == null) {
+          bountyPoster = "Anon";
+        } else {
+          bountyPoster = this.user.displayName;
+        }
+
+        if (bountyTitle == null || bountyLanguage == null ||
+          bountyContent == null) {
+          console.log("Need Propper Errors - Missing Content, please fill out fields");
+          return -1;
+        }
 
         // Push new bounty to the database as a JSON object
         this.$.query.ref.push({
@@ -98,18 +150,19 @@
           poster: bountyPoster,
           posterUID: this.user.uid,
           content: bountyContent,
-          rank : 0
+          rank: 0
         });
 
         // Empty input fields
-        this.$.bountyTitle.value = "";
-        this.$.bountyLanguage.value = "";
-        this.$.bountyBody.value = "";
+        this.$.bountyTitle.value = null;
+        this.$.bountyLanguage.value = null;
+        this.$.bountyBody.value = null;
       }
 
+      // Upvote a bounty
       upVote(e) {
         var bountyKey = e.currentTarget.bounty.$key;
-        var userUID   = this.user.uid;
+        var userUID = this.user.uid;
 
         // Check the up-vote log to make sure the user hasn't already up-voted
         this.$.checkUp.path = "/bounties/" + bountyKey + "/upVoteLog";
@@ -118,30 +171,35 @@
         var found = false;
         var objID = null; // used to delete uservote log object
 
-        for(var i = 0; i < upVoteLog.length && !found; i++) {
-          if(upVoteLog[i].uid == userUID) {
+        for (var i = 0; i < upVoteLog.length && !found; i++) {
+          if (upVoteLog[i].uid == userUID) {
             found = true;
             objID = upVoteLog[i].$key;
           }
         }
 
-        if(!found) {
+        if (!found) {
           this.$.checkUp.ref.push({
             uid: userUID
           });
 
           var newRank = parseInt(e.currentTarget.bounty.rank) + 1;
-          this.$.query.ref.child(bountyKey).update({rank: newRank});
+          this.$.query.ref.child(bountyKey).update({
+            rank: newRank
+          });
         } else { // User has already voted so remove their upvote
           this.$.checkUp.ref.remove(this.$.checkUp.child(objID).ref);
           var newRank = parseInt(e.currentTarget.bounty.rank) - 1;
-          this.$.query.ref.child(bountyKey).update({rank: newRank});
+          this.$.query.ref.child(bountyKey).update({
+            rank: newRank
+          });
         }
       }
 
+      // Downn vote a bounty
       downVote(e) {
         var bountyKey = e.currentTarget.bounty.$key;
-        var userUID   = this.user.uid;
+        var userUID = this.user.uid;
 
         // Check the up-vote log to make sure the user hasn't already up-voted
         this.$.checkUp.path = "/bounties/" + bountyKey + "/downVoteLog";
@@ -150,43 +208,48 @@
         var found = false;
         var objID = null;
 
-        for(var i = 0; i < downVoteLog.length && !found; i++) {
-          if(downVoteLog[i].uid == userUID) {
+        for (var i = 0; i < downVoteLog.length && !found; i++) {
+          if (downVoteLog[i].uid == userUID) {
             objID = downVoteLog[i].$key;
             found = true;
           }
         }
 
-        if(!found && objID == null) {
+        if (!found && objID == null) {
           this.$.checkUp.ref.push({
             uid: userUID
           });
 
           var newRank = parseInt(e.currentTarget.bounty.rank) - 1;
-          this.$.query.ref.child(bountyKey).update({rank: newRank});
+          this.$.query.ref.child(bountyKey).update({
+            rank: newRank
+          });
         } else { // User has already voted so remove their downVote
           this.$.checkUp.ref.remove(this.$.checkUp.child(objID).ref);
           var newRank = parseInt(e.currentTarget.bounty.rank) + 1;
-          this.$.query.ref.child(bountyKey).update({rank: newRank});
+          this.$.query.ref.child(bountyKey).update({
+            rank: newRank
+          });
         }
       }
 
       // Helper function for the dom-repeat so it can sort bounties by their rank
       _sortBounties(a, b) {
-        var a = parseInt(a);
-        var b = parseInt(b);
+        var a = parseInt(a.rank);
+        var b = parseInt(b.rank);
 
-        if(a == b)
+        if (a == b)
           return 0;
         else {
-          return  a < b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
+          return a > b ? -1 : 1; // Reversed so that higher ranking posts appear at the top
         }
       }
 
+      // Deletes the bounty from the database
       markAsComplete(e) {
-        if(e.currentTarget.bounty) {
+        if (e.currentTarget.bounty) {
           var bounty = e.currentTarget.bounty;
-          if(bounty.posterUID == this.user.uid) {
+          if (bounty.posterUID == this.user.uid) {
             this.$.query.ref.child(bounty.$key).remove();
           } else {
             console.log("ERROR - NOT MATCHING UIDs - CReATE PROPPER ERROR MESSAGES")
@@ -199,7 +262,7 @@
 
     }
 
-    customElements.define(codex_bounties.is,codex_bounties);
+    customElements.define(codex_bounties.is, codex_bounties);
   </script>
 
 </dom-module>

@@ -1,7 +1,17 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-login.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    This custom element produces a button on the page that will handle
+    logging in and logging out
+-->
+
 <link rel="import" href="bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 
 <dom-module id="codex-login">
+
   <template>
     <firebase-auth
       id="auth"
@@ -10,7 +20,8 @@
       provider="google">
     </firebase-auth>
 
-    <paper-button raised on-tap="login" hidden$="[[user]]"> Sign In </paper-button>
+    <paper-button raised on-tap="login" hidden$="[[user]]"> <iron-icon icon="vaadin:google-plus"></iron-icon>  Sign In  </paper-button> <br/>
+    <paper-button raised on-tap="strangerLogin" hidden$="[[user]]"> <iron-icon icon="vaadin:bug-o"></iron-icon>  Sign in  </paper-button>
     <paper-button raised on-tap="logout" hidden$="[[!user]]"> Sign Out </paper-button>
 
 
@@ -18,7 +29,9 @@
 
   <script>
     class codex_login extends Polymer.Element {
-      static get is() {return 'codex-login';}
+      static get is() {
+        return 'codex-login';
+      }
 
       static get properties() {
         return {
@@ -37,10 +50,17 @@
         }
       }
 
+      // Sign in using Google's o-auth platform
       login() {
         this.$.auth.signInWithRedirect();
       }
 
+      // Sign in anonymously function
+      strangerLogin() {
+        this.$.auth.signInAnonymously();
+      }
+
+      // destroy current user session and refresh page to clean everything up
       logout() {
         this.$.auth.signOut();
         location.reload();
@@ -48,7 +68,7 @@
 
     }
 
-    customElements.define(codex_login.is,codex_login);
+    customElements.define(codex_login.is, codex_login);
   </script>
 
 </dom-module>

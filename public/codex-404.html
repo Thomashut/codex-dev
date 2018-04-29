@@ -1,3 +1,14 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-404.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Page displayed when the user attempts to access a page they are not allowed
+    to or a page that doesn't exist. Will display a loading circle for when the user
+    is logging in as user can sometimes be taken to the 404 page if they do not log
+    in fast enough.
+-->
+
 <dom-module id="codex-404">
   <template>
 
@@ -12,7 +23,9 @@
 
   <script>
     class codex_404 extends Polymer.Element {
-      static get is() {return 'codex-404';};
+      static get is() {
+        return 'codex-404';
+      };
 
       ready() {
         super.ready();
@@ -21,7 +34,7 @@
 
     }
 
-    customElements.define(codex_404.is,codex_404);
+    customElements.define(codex_404.is, codex_404);
   </script>
 
 </dom-module>

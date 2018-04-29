@@ -1,0 +1,85 @@
+body {
+  font-family: 'Cabin', sans-serif;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+}
+app-header {
+  font-family: 'Cabin', sans-serif;
+  background-color: #00897B;
+  background: rgba(255,171,15,0.8);
+  color: #fff;
+  margin: 0px;
+}
+paper-icon-button {
+  --paper-icon-button-ink-color: white;
+}
+app-drawer-layout:not([narrow]) [drawer-toggle] {
+  display: none;
+}
+#nav-head {
+  font-family: 'Cabin', sans-serif;
+  background-color: #00897B;
+  background: rgba(255,171,15,0.8);
+  color: black;
+}
+iron-selector paper-button {
+  font-family: 'Cabin', sans-serif;
+  display: list-item;
+  text-align: left;
+  background-color: indigo;
+  background: rgba(255,171,15,0.8);
+  margin-top: 5%;
+  width: 85%;
+  color: black;
+}
+#content {
+  padding: 5px;
+}
+#drawer {
+  height: 100%;
+  overflow: auto;
+}
+app-toolbar {
+  color: black;
+}
+codex-login {
+  font-family: 'Cabin', sans-serif;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  text-align: center;
+  display: list-item;
+}
+template {
+  font-family: 'Cabin', sans-serif;
+}
+codex-home {
+  font-family: 'Cabin', sans-serif;
+}
+codex-bounties {
+  font-family: 'Cabin', sans-serif;
+}
+codex-feed {
+  font-family: 'Cabin', sans-serif;
+}
+codex-home {
+  font-family: 'Cabin', sans-serif;
+}
+codex-posts {
+  font-family: 'Cabin', sans-serif;
+}
+codex-profile {
+  font-family: 'Cabin', sans-serif;
+}
+codex-search {
+  font-family: 'Cabin', sans-serif;
+}
+codex-view {
+  font-family: 'Cabin', sans-serif;
+}
+codex-saved {
+  font-family: 'Cabin', sans-serif;
+}
+::-webkit-scrollbar {
+  display: none;
+}

@@ -1,11 +1,18 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-search.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    This custom element handles the searching. When a user connects to the search
+    page they will use this page to find new content on the site.
+-->
+
 <dom-module id="codex-search">
   <template>
-    <style>
-      .feedItem {
-        margin: 8px;
-        width: 80%;
-      }
-    </style>
+    <head>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-feedStyle.css">
+    </head>
+
     <h1> Search </h1>
 
     <firebase-auth
@@ -23,7 +30,7 @@
       <paper-input id="searchLanguage" label="Enter a Specific Language Here"> </paper-input>
       <paper-listbox id="sortType" selected="0">
         <paper-item> No Sort </paper-item>
-        <paper-item> Consiceness </paper-item>
+        <paper-item> Conciseness </paper-item>
         <paper-item> Well Explained </paper-item>
         <paper-item> Well Linked </paper-item>
         <paper-item> General Rank </paper-item>
@@ -44,14 +51,15 @@
             </div>
           </paper-card>
         </template>
-    </div>
+  </div>
 
   </template>
 
   <script>
-
     class codex_search extends Polymer.Element {
-      static get is() {return 'codex-search';}
+      static get is() {
+        return 'codex-search';
+      }
 
       static get properties() {
         return {
@@ -74,7 +82,7 @@
 
       // Filter function for the template element to filter results
       _search(result) {
-        if(!result) return false; // Have no data to filter
+        if (!result) return false; // Have no data to filter
 
         var searchTag = null;
         var searchLanguage = null;
@@ -84,25 +92,24 @@
         var resultLanguage = result.language.toLowerCase();
         var resultAuthor = result.author.toLowerCase();
 
-        if(this.$.searchTag.value) {
+        if (this.$.searchTag.value) {
           searchTag = this.$.searchTag.value.toLowerCase();
         }
 
-        if(this.$.searchLanguage.value) {
+        if (this.$.searchLanguage.value) {
           searchLanguage = this.$.searchLanguage.value.toLowerCase();
         }
 
-        if(!searchTag && !searchLanguage) return false; // No Search Entered
+        if (!searchTag && !searchLanguage) return false; // No Search Entered
         else if (searchTag && searchLanguage) { // Search on both the language and the tag
-          if((searchTag == resultTitle && searchLanguage == resultLanguage)
-                                       ||
-             (searchTag == resultAuthor && searchLanguage == resultLanguage)
-           ) return true;
-        } else if(searchTag && !searchLanguage) { // Search on just the tag
-          if(searchTag == resultTitle || searchTag == resultAuthor)
+          if ((searchTag == resultTitle && searchLanguage == resultLanguage) ||
+            (searchTag == resultAuthor && searchLanguage == resultLanguage)
+          ) return true;
+        } else if (searchTag && !searchLanguage) { // Search on just the tag
+          if (searchTag == resultTitle || searchTag == resultAuthor)
             return true;
-        } else if(!searchTag && searchLanguage) { // Search on just the language
-          if(searchLanguage == resultLanguage)
+        } else if (!searchTag && searchLanguage) { // Search on just the language
+          if (searchLanguage == resultLanguage)
             return true;
         } else return false; // Something strange happened so throw false
       }
@@ -115,25 +122,25 @@
           case 0: // No specific sort
             return 0;
           case 1: // Sort on Consiceness rank
-            if(a.conRank == b.conRank)
+            if (parseInt(a.conRank) == parseInt(b.conRank))
               return 0;
             else
-              return parseInt(a.conRank) < parseInt(b.conRank) ? -1 : 1;
+              return parseInt(a.conRank) > parseInt(b.conRank) ? -1 : 1;
           case 2: // Sort on explain rank
-            if(a.explainRank ==  b.explainRank)
+            if (parseInt(a.explainRank) == parseInt(b.explainRank))
               return 0;
             else
-              return parseInt(a.explainRank) < parseInt(b.explainRank) ? -1 : 1;
+              return parseInt(a.explainRank) > parseInt(b.explainRank) ? -1 : 1;
           case 3: // Sort on Link Rank
-            if(a.linkRank == b.linkRan)
+            if (parseInt(a.linkRank) == parseInt(b.linkRank))
               return 0;
             else
-              return  parseInt(a.linkRank) < parseInt(b.linkRank) ? -1 : 1;
+              return parseInt(a.linkRank) > parseInt(b.linkRank) ? -1 : 1;
           case 4: // Sort on General Rank
-            if(a.rank == b.rank)
+            if (parseInt(a.rank) == parseInt(b.rank))
               return 0;
             else
-              return  parseInt(a.rank) < parseInt(b.rank) ? -1 : 1;
+              return parseInt(a.rank) > parseInt(b.rank) ? -1 : 1;
           default: // Drop down menu is broken so do no specific sort
             return 0;
         }
@@ -144,9 +151,9 @@
         this.$.searchRepeat.render(); // Re-render the result list. Will re-run the filter function
       }
 
-      // to-do
+      // Load post onto the view post site and take the user to the view page
       viewPost(e) {
-        if(e.currentTarget.post){
+        if (e.currentTarget.post) {
           this.post = e.currentTarget.post;
           this.page = "view";
         } else {
@@ -155,7 +162,7 @@
       }
     }
 
-    customElements.define(codex_search.is,codex_search);
+    customElements.define(codex_search.is, codex_search);
   </script>
 
 </dom-module>

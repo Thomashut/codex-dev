@@ -1,4 +1,18 @@
 <!--
+  Author        : Thomas Hutchinson
+  File          : codex-app.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    The custome app element. This element handles the navigation bar as well as
+    the page swapping. The entire site is a single page and those views are swapped
+    out and handled by this element. On top of that this element also handle the current
+    page property and handes to elements that require it.
+
+    All imports are also handled in this file so that all the other custom elements can
+    user them if needs be.
+-->
+
+<!--
   Color Scheme
     Primary: #FFE71B
     Secondary: #E87E0C
@@ -6,7 +20,9 @@
     Highlight 2: #8B0CE8
     Highlight 3: #0D68FF
 -->
-<head> <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet"> </head>
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet"> </head>
 
 <!-- Bower_components import -->
 <link rel="import" href="bower_components/polymer/polymer.html">
@@ -58,114 +74,48 @@
 <link rel="import" href="codex-view.html">
 <!-- End of Custom Components Import -->
 
+<!-- Style Import -->
+
+
 <dom-module id="codex-app">
   <template>
     <head>
       <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-appStyle.css">
     </head>
 
-    <style>
-      body {
-        font-family: 'Cabin', sans-serif;
-        margin: 0px;
-        height: 100%;
-        width: 100%;
-      }
-      app-header {
-        font-family: 'Cabin', sans-serif;
-        background-color: #00897B;
-        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
-        color: #fff;
-        margin: 0px;
-        width: 100%;
-        text-shadow: 2px 0px black;
-      }
-      paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-      app-drawer-layout:not([narrow]) [drawer-toggle] {
-        display: none;
-      }
-      #nav-head {
-        font-family: 'Cabin', sans-serif;
-        background-color: #00897B;
-        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
-        color: #fff;
-        text-shadow: 2px 0px black;
-      }
-      iron-selector paper-button {
-        font-family: 'Cabin', sans-serif;
-        display: list-item;
-        text-align: left;
-        background-color: indigo;
-        background: linear-gradient(-180deg,#FFE71B,#E87E0C);
-        margin-top: 5%;
-        width: 85%;
-        color: #fff;
-        text-shadow: 2px 0px black;
-      }
-      #drawer {
-        width: 105%;
-      }
-      codex-login {
-        font-family: 'Cabin', sans-serif;
-        margin-top: 10%;
-        text-align: center;
-        display: list-item;
-      }
-      template {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-home {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-bounties {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-feed {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-home {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-posts {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-profile {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-search {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-view {
-        font-family: 'Cabin', sans-serif;
-      }
-      codex-saved {
-        font-family: 'Cabin', sans-serif;
-      }
-    </style>
 
     <app-drawer-layout>
 
-      <app-drawer slot="drawer">
+      <app-drawer id="appDrawer" slot="drawer" swipeOpen="true">
         <div id="drawer">
         <app-toolbar id="nav-head">Navigate</app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list"
           role="navigation" fallback-selection="404">
             <paper-button raised class="indigo" name="home"> <iron-icon icon="vaadin:home"> </iron-icon> Home </paper-button>
             <paper-button raised class="indigo" name="search"> <iron-icon icon="vaadin:search"> </iron-icon> Search </paper-button>
-            <paper-button raised class="indigo" name="bounties"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
+            <paper-button raised class="indigo" name="bounties" hidden$="[[!user]]"> <iron-icon icon="vaadin:tasks"> </iron-icon> Bounties </paper-button>
             <paper-button raised class="indigo" name="feed" hidden$="[[!user]]"> <iron-icon icon="vaadin:list-select"> </iron-icon> Your Feed </paper-button>
 
             <paper-button raised class="indigo" name="profile" hidden$="[[!user]]"> <iron-icon icon="vaadin:user"> </iron-icon> Profile </paper-button>
             <paper-button raised class="indigo" name="posts" hidden$="[[!user]]"> <iron-icon icon="vaadin:edit"> </iron-icon> Posts </paper-button>
             <paper-button raised class="indigo" name="saved" hidden$="[[!user]]"> <iron-icon icon="vaadin:safe"> </iron-icon> Saved </paper-button>
-            <paper-button raised class="indigo" name="view" hidden$="[[!post]]"> <iron-icon icon="vaadin:plus"> </iron-icon> View Post </paper-button>
+            <paper-button raised class="indigo" name="view" hidden$="[[!post]]"> <iron-icon icon="vaadin:file-text"> </iron-icon> View Post </paper-button>
+
+            <a href="https://drive.google.com/file/d/14yYQ71lqH6TvN6L_oaQeyQbK8GEo7-nS/view?usp=sharing"
+              style="text-decoration: none;" target="_blank">
+              <paper-button raised class="indigo"> <iron-icon icon="vaadin:info-circle"></iron-icon> Help </paper-button>
+            </a>
+
+            <a href="https://goo.gl/forms/WwTqO8hPUnufg7J83"
+              style="text-decoration: none;" target="_blank">
+              <paper-button raised class="indigo"> <iron-icon icon="vaadin:input"></iron-icon> Tester Form </paper-button>
+            </a>
 
             <codex-login user="{{user}}" page="{{page}}"> </codex-login>
-          </div>
-        </iron-selector>
 
+        </iron-selector>
+        </div>
       </app-drawer>
 
       <app-header-layout>
@@ -200,10 +150,11 @@
   </template>
 
   <script>
-
     class codex_app extends Polymer.Element {
 
-      static get is() {return 'codex-app';}
+      static get is() {
+        return 'codex-app';
+      }
 
       static get properties() {
         return {
@@ -211,7 +162,7 @@
             type: String,
             reflectToAttribute: true,
             value: "home",
-            notify: true
+            notify: true,
           },
           user: {
             type: Object,
@@ -226,21 +177,23 @@
         }
       }
 
+      // Called when the content is finished loading
       ready() {
         super.ready();
-        this.$.ironPages.addEventListener("selected-item-changed",function(e) {
-          if(e.currentTarget.selected == "404") {
+        this.$.ironPages.addEventListener("selected-item-changed", function(e) {
+          if (e.currentTarget.selected == "404") {
             console.log("Error - invalid Page Access");
             // e.currentTarget.select("home");
           }
         });
       }
 
+      // Open the navigation bar. Called on menu button pres
       openNav() {
         this.$.drawer.toggle();
       }
     }
 
-    customElements.define(codex_app.is,codex_app);
+    customElements.define(codex_app.is, codex_app);
   </script>
 </dom-module>

@@ -1,12 +1,21 @@
+<!--
+  Author        : Thomas Hutchinson
+  File          : codex-view.html
+  Project       : Codex - Dissertation Project
+  Description   :
+    Custom component codex-view. This element handles the detailed viewing
+    of posts. The page cannot be accessed without the using press the view
+    post button on a post from the feed or the search menu. Here users can
+    view the post, vote on attributes and make comments.
+-->
+
 <dom-module id="codex-view">
-  <style>
-    .feedItem {
-      margin: 10px;
-      width: 80%;
-      }
-    }
-  </style>
   <template>
+    <head>
+      <link rel="stylesheet" type="text/css" href="./res/style/codex-feedStyle.css">
+    </head>
+
+
   <firebase-auth
     user="{{user}}">
   </firebase-auth>
@@ -34,8 +43,8 @@
       <paper-button raised on-tap="previous" post="[[post]]"> Return to the Previous Post </paper-button>
     </template>
 
-    <paper-card heading="[[post.title]]" class="feedItem">
-      <div class="card-content">
+  <paper-card heading="[[post.title]]" class="feedItem">
+    <div class="card-content">
       <h3> [[post.language]] </h3>
       <h3> By: [[post.author]] </h3>
       <p> [[post.content]] </p>
@@ -46,18 +55,18 @@
       <p> Explain Rank: [[post.explainRank]] </p>
       <p> Well Linkedness: [[post.linkRank]] </p>
       <p> General Rank: [[post.rank]] </p>
-      </div>
-      <div class="card-actions">
-      <p> <paper-button id="saveButton" raised on-tap="savePost" post="[[post]]"
-              alreadySaved="false"> Save Post </paper-button>
-          </p>
-      </div>
+    </div>
+    <div class="card-actions">
+      <p>
+        <paper-button id="saveButton" raised on-tap="savePost" post="[[post]]" alreadySaved="false"> Save Post </paper-button>
+      </p>
+    </div>
     <paper-card>
-  </template>
+      </template>
 
-  <h4> Tagged Posts </h4>
-  <paper-button raised on-tap="refreshTags"> Load Tagged Posts </paper-button>
-    <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter" observe="post">
+      <h4> Tagged Posts </h4>
+      <paper-button raised on-tap="refreshTags"> Load Tagged Posts </paper-button>
+      <template id="tagRepeat" is="dom-repeat" items="{{posts}}" as="tag" filter="_filter" observe="post">
         <paper-card heading="[[tag.title]]" class="feedItem">
         <div class="card-content">
           <li> [[tag.language]] </li>
@@ -69,15 +78,15 @@
         </paper-card>
     </template>
 
-  <h4> Discussion Section </h4>
-  <div id="postComment">
-    <paper-input id="commentBody" label="Post Comment"></paper-input>
-    <paper-button raised on-tap="saveComment"> Save Button </paper-button>
-  </div>
+      <h4> Discussion Section </h4>
+      <div id="postComment">
+        <paper-input id="commentBody" label="Post Comment"></paper-input>
+        <paper-button raised on-tap="saveComment"> Save Button </paper-button>
+      </div>
 
 
-  <paper-button raised on-tap="refreshComments"> Load Comments </paper-button> <br/> <br/>
-    <template id="commentRepeat" is="dom-repeat" items="{{comments}}" as="comment">
+      <paper-button raised on-tap="refreshComments"> Load Comments </paper-button> <br/> <br/>
+      <template id="commentRepeat" is="dom-repeat" items="{{comments}}" as="comment">
       <paper-card header="[[comment.author]]" class="feedItem">
         <paper-avatar src="[[comment.authorURL]]"></paper-avatar>
         <p> [[comment.author]] </p>
@@ -85,153 +94,177 @@
     </paper-card>
     </template>
 
-  </template>
-  <script>
-    class codex_view extends Polymer.Element {
+      </template>
+      <script>
+        class codex_view extends Polymer.Element {
 
-      static get is() {return "codex-view";}
-
-      static get properties() {
-        return {
-          user: {
-            type: Object
-          },
-          post: {
-            type: Object
-          },
-          posts: {
-            type: Object,
-            notify: true
-          },
-          page: {
-            type: Object,
-            notify: true
-          },
-          comments: {
-            type: Object,
-            notify: true
-          }
-        }
-      }
-
-      ready() {
-        super.ready();
-        this.$.postView.render(); // Refresh the post template
-        if(this.$.tagRepeat) {
-          this.$.tagRepeat.render();
-        }
-        if(this.$.returnView) {
-          this.$.returnView.render();
-        }
-        if(this.$.commentRepeat && this.post) {
-          this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
-          this.$.commentRepeat.render();
-        }
-      }
-
-      home() {
-        this.$.page = "home";
-      }
-
-      savePost(e) {
-        var postToSave = e.currentTarget.post;
-
-        if(!postToSave) {
-          console.log("Create Propper Error Messages - No Post to Save");
-          return -1;
-        }
-
-        // Intilizse the saved List
-        if(!localStorage.getItem("savedPosts")) {
-          var savedPosts = new Array();
-          savedPosts.push(postToSave);
-          localStorage.setItem("savedPosts",JSON.stringify(savedPosts));
-        } else {
-          var savedPosts = JSON.parse(localStorage.getItem("savedPosts"))
-          localStorage.removeItem("savedPosts"); // Clear local Storage
-          savedPosts.push(postToSave);
-          localStorage.setItem("savedPosts",JSON.stringify(savedPosts));
-        }
-      }
-
-      _filter(result) {
-        if(!this.post) {return false;}
-        if(!result) {return false;}
-        var queryKey = result.$key;
-        var postTags = JSON.parse(this.post.taggedPosts);
-        console.log("QK: " + queryKey + " PT " + postTags);
-
-        if(postTags.length <= 0) {return false;} // No tags
-        else {
-          for(var i = 0; i < postTags.length; i++) {
-            if(postTags[i] == queryKey) return true;
-          }
-        }
-      }
-
-      viewTag(e) {
-          var currentTag = e.currentTarget.tag;
-          if(!currentTag) {
-            console.log("ERROR - MISSING TAG");
-            return -1;
+          static get is() {
+            return "codex-view";
           }
 
-          currentTag.parentTag = this.post; // Used so the user can go back up the trail
-          this.post = null;
-          this.page = "home";
-          this.post = currentTag;
-          this.ready(); // Refresh the page
-          this.$.tagRepeat.render();
-          this.page = "view";
-      }
+          static get properties() {
+            return {
+              user: {
+                type: Object
+              },
+              post: {
+                type: Object
+              },
+              posts: {
+                type: Object,
+                notify: true
+              },
+              page: {
+                type: Object,
+                notify: true
+              },
+              comments: {
+                type: Object,
+                notify: true
+              }
+            }
+          }
 
-      saveComment(e) {
-        if(!this.$.commentBody || !this.post) {
-          console.log("Need Proper Errors - No Comment to post or post to comment on");
-          return -1;
+          // Called on page load, not page connection.
+          ready() {
+            super.ready();
+            this.$.postView.render(); // Refresh the post template
+            if (this.$.tagRepeat) {
+              this.$.tagRepeat.render();
+            }
+            if (this.$.returnView) {
+              this.$.returnView.render(); // Checks to see if user can return to a previous post if following tag list
+            }
+            if (this.$.commentRepeat && this.post) {
+              this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
+              this.$.commentRepeat.render(); // Get the comments and re-render the comments section
+            }
+          }
+
+          // Returns the user to the homepage
+          home() {
+            this.$.page = "home";
+          }
+
+          // Store a post in offline storage (save it to local storage)
+          savePost(e) {
+            var postToSave = e.currentTarget.post;
+
+            if (!postToSave) {
+              console.log("Create Propper Error Messages - No Post to Save");
+              return -1;
+            }
+
+            // Intilizse the saved List
+            if (!localStorage.getItem("savedPosts")) {
+              var savedPosts = new Array();
+              savedPosts.push(postToSave);
+              localStorage.setItem("savedPosts", JSON.stringify(savedPosts));
+            } else {
+              var savedPosts = JSON.parse(localStorage.getItem("savedPosts"))
+              localStorage.removeItem("savedPosts"); // Clear local Storage
+              savedPosts.push(postToSave);
+              localStorage.setItem("savedPosts", JSON.stringify(savedPosts));
+            }
+          }
+
+          // Helper function called by DOM-repeat. Used to find tagged posts
+          _filter(result) {
+            if (!this.post) {
+              return false;
+            }
+            if (!result) {
+              return false;
+            }
+            var queryKey = result.$key;
+            var postTags = JSON.parse(this.post.taggedPosts);
+
+            if (postTags.length <= 0) {
+              return false;
+            } // No tags
+            else {
+              for (var i = 0; i < postTags.length; i++) {
+                if (postTags[i] == queryKey) return true;
+              }
+            }
+          }
+
+          // When user views a tag this function will load that tag and re-render view page
+          viewTag(e) {
+            var currentTag = e.currentTarget.tag;
+            if (!currentTag) {
+              console.log("ERROR - MISSING TAG");
+              return -1;
+            }
+
+            currentTag.parentTag = this.post; // Used so the user can go back up the trail
+            this.post = null;
+            this.page = "home";
+            this.post = currentTag;
+            this.ready(); // Refresh the page
+            this.$.tagRepeat.render();
+            this.page = "view";
+          }
+
+          // Saves users comment to the current post
+          saveComment(e) {
+            if (this.$.commentBody == null || !this.post) {
+              console.log("Need Proper Errors - No Comment to post or post to comment on");
+              return -1;
+            }
+
+            var authorName = "";
+
+            if (this.user.displayName == "" || this.user.displayName == null) {
+              authorName = "Anon";
+            } else {
+              authorName = this.user.displayName;
+            }
+
+            var commentBobdy = this.$.commentBody.value;
+            var key = this.post.$key;
+
+            this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
+
+            var photoURL = null;
+            if (this.user.photoURL) {
+              photoURL = this.user.photoURL
+            }
+
+            this.$.commentQuery.ref.push({
+              authorURL: photoURL,
+              body: this.$.commentBody.value,
+              author: authorName
+            }); // Push the comment to the database
+
+            this.$.commentBody.value = "";
+
+          }
+
+          // Return to a previous post if a user viewed a tag
+          previous(e) {
+            var post = this.post;
+            this.post = null;
+            this.post = post.parentTag; // Current post become equal to the parent post
+            this.page = "home";
+            this.page = "view";
+            this.ready(); // Refresh the page
+            this.$.tagRepeat.render();
+          }
+
+          // Re-load the tags, page needs a refresh to do this.
+          refreshTags() {
+            this.page = "home";
+            this.ready();
+            this.page = "view";
+          }
+
+          // Re load any new comnments
+          refreshComments() {
+            this.ready();
+          }
         }
 
-        var commentBobdy = this.$.commentBody.value;
-        var key = this.post.$key;
-
-        this.$.commentQuery.path = "/posts/" + this.post.$key + "/comments";
-
-        var photoURL = null;
-        if(this.user.photoURL) {
-          photoURL = this.user.photoURL
-        }
-
-        this.$.commentQuery.ref.push({
-          authorURL: photoURL,
-          body: this.$.commentBody.value,
-          author: this.user.displayName
-        }); // Push the comment to the database
-
-        this.$.commentBody.value = "";
-
-      }
-
-      previous(e) {
-        var post = this.post;
-        this.post = null;
-        this.post = post.parentTag; // Current post become equal to the parent post
-        this.page = "home";
-        this.page = "view";
-        this.ready(); // Refresh the page
-        this.$.tagRepeat.render();
-      }
-
-      refreshTags() {
-        this.page = "home";
-        this.ready();
-        this.page = "view";
-      }
-
-      refreshComments() {
-        this.ready();
-      }
-    }
-
-    customElements.define(codex_view.is,codex_view);
-  </script>
+        customElements.define(codex_view.is, codex_view);
+      </script>
 </dom-module>

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  padding: 10px;
+}
+
+.feedItem {
+  margin: 10px;
+  width: 80%;
+}
